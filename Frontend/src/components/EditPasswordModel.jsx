@@ -1,86 +1,115 @@
-import React, { useContext, useState } from 'react'
-import { AuthContext } from './../context/AuthContext';
-import toast from 'react-hot-toast';
-import { api } from '../axios/axiosInstance';
+  import React, {useState } from "react";
+  import toast from "react-hot-toast";
+  import { api } from "../axios/axiosInstance";
+
+  const EditPasswordModel = ({ onClose }) => {
+  const [formData, setFormData]= useState({
+    currentPassword:"",
+    newPassword:"",
+    confirmPassword:""
+    
+  });
 
 
-const EditPasswordModel = ({onClose}) => {
+  const handleChange = (e)=>{
+    setFormData({...formData, [e.target.name]: e.target.value});
+  };
 
- 
+  const handleEditPassword = async ()=>{
+    const {currentPassword , newPassword, confirmPassword} = formData;
 
- 
-  return (
-  <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center">
-    <div className="bg-white w-[420px] p-8 rounded-2xl shadow-xl">
+    if(!currentPassword || !newPassword || !confirmPassword){
+      toast.error("all feilds are required")
+      return;
+    }
+
+    if(newPassword !== confirmPassword){
+      toast.error("New password and confirm password do not match")
+      return;
+    }
+
+  try {
+    await api.patch("/updatePassword", { password: newPassword } );
+
+    toast.success("password updated successfully")
+    onClose();
+
+    } catch (error) {
+    toast.error(error?.response?.data?.message || "Something went wrong")
+  }
+
+  }
+
+
+   return (
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
+    <div className="bg-white w-96 p-6 rounded-2xl shadow-2xl animate-fadeIn">
       
-      {/* Icon */}
-      <div className="w-14 h-14 mx-auto mb-4 bg-blue-50 flex items-center justify-center rounded-full">
-        <i className="fa-solid fa-lock text-blue-600 text-2xl"></i>
+      {/* Header */}
+      <div className="flex flex-col items-center mb-5">
+        <div className="h-14 w-14 bg-green-100 text-green-600 flex items-center justify-center rounded-full text-2xl">
+          <i className="fa-solid fa-lock"></i>
+        </div>
+        <h2 className="text-xl font-semibold mt-3">Change Password</h2>
       </div>
 
-      {/* Heading */}
-      <h2 className="text-2xl font-semibold text-center mb-2">
-        Change Password
-      </h2>
+      {/* Inputs */}
+      <div className="space-y-4">
+        <div>
+          <input
+            name="currentPassword"
+            type="password"
+            placeholder="Current Password"
+            onChange={handleChange}
+            value={formData.currentPassword}
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+          />
+        </div>
 
-      <p className="text-gray-500 text-sm text-center mb-6 leading-relaxed">
-        To change your password, please fill in the fields below. Your password must 
-        contain at least 8 characters including upper & lower case letters, a number, 
-        and a special character.
-      </p>
+        <div>
+          <input
+            name="newPassword"
+            type="password"
+            placeholder="New Password"
+            onChange={handleChange}
+            value={formData.newPassword}
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+          />
+        </div>
 
-      {/* Current Password */}
-      <label className="block text-sm font-medium mb-1">Current Password</label>
-      <div className="relative mb-4">
-        <i className="fa-solid fa-lock absolute left-3 top-3 text-gray-400"></i>
-        <input
-          type="password"
-          placeholder="Current Password"
-          className="w-full pl-10 pr-10 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-        />
-        <i className="fa-solid fa-eye-slash absolute right-3 top-3 text-gray-400"></i>
+        <div>
+          <input
+            name="confirmPassword"
+            type="password"
+            placeholder="Confirm Password"
+            onChange={handleChange}
+            value={formData.confirmPassword}
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+          />
+        </div>
       </div>
 
-      {/* New Password */}
-      <label className="block text-sm font-medium mb-1">New Password</label>
-      <div className="relative mb-4">
-        <i className="fa-solid fa-lock absolute left-3 top-3 text-gray-400"></i>
-        <input
-          type="password"
-          placeholder="New Password"
-          className="w-full pl-10 pr-10 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-        />
-        <i className="fa-solid fa-eye-slash absolute right-3 top-3 text-gray-400"></i>
+      {/* Buttons */}
+      <div className="mt-6 space-y-3">
+        <button
+          onClick={handleEditPassword}
+          className="w-full py-2.5 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition"
+        >
+          Change Password
+        </button>
+
+        <button
+          onClick={onClose}
+          className="w-full py-2.5 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition"
+        >
+          Cancel
+        </button>
       </div>
 
-      {/* Confirm Password */}
-      <label className="block text-sm font-medium mb-1">Confirm Password</label>
-      <div className="relative mb-6">
-        <i className="fa-solid fa-lock absolute left-3 top-3 text-gray-400"></i>
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          className="w-full pl-10 pr-10 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-        />
-        <i className="fa-solid fa-eye-slash absolute right-3 top-3 text-gray-400"></i>
-      </div>
-
-      {/* Primary Button */}
-      <button className="w-full py-3 bg-blue-600 text-white rounded-xl text-lg font-semibold hover:bg-blue-700 transition">
-        Change Password
-      </button>
-
-      {/* Cancel link */}
-      <button
-        onClick={onClose}
-        className="w-full py-2 mt-3 text-gray-600 text-sm hover:underline"
-      >
-        Cancel
-      </button>
     </div>
   </div>
 );
 
-}
+  };
 
-export default EditPasswordModel
+  export default EditPasswordModel;
