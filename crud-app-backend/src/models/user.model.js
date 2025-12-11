@@ -102,5 +102,19 @@ userSchema.methods.generateEmailVerificationToken = function () {
  
 };
 
+userSchema.methods.generateResetPasswordToken = function () {
+  const randomBytes = crypto.randomBytes(32).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(randomBytes)
+    .digest("hex");
+
+  this.passwordResetTokenExpiry = Date.now() + 10 * 60 * 1000;
+
+  return randomBytes;
+};
+
+
 const userModel = mongoose.model("User", userSchema);
 export default userModel;

@@ -11,3 +11,11 @@ export const registerSchema = joi.object({
 export const updatePasswordSchema = joi.object({
     password: joi.string().min(5).max(50).required(),
 }); 
+
+export const forgotPasswordSchema = joi.object({
+  email: joi.string().min(5).max(50).required().email(),
+});
+
+export const resetPasswordSchema = joi.object({
+    password: joi.string().min(5).max(50).required(),
+});     

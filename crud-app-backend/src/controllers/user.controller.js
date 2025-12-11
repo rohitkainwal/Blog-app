@@ -156,3 +156,46 @@ await existingUser.save();
 new ApiResponse(200, "password updated successfully").send(res);
   
 });
+
+export const forgotPassword = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  let existingUser = await userModel.findOne({ email });
+  if (!existingUser) next(new CustomError(400, "Email Not Found"));
+
+  let resetPasswordToken = existingUser.generateResetPasswordToken();
+  await existingUser.save();
+
+  let resetPassword_url = `http://localhost:9000/api/user/reset-password/${resetPasswordToken}`;
+
+  await sendEmail(
+    email,
+    "Reset Password",
+    "Reset Password",
+    `<h1> this is for reset password</h1> <a href="${resetPassword_url}">Click Here</a> <h3> ${resetPasswordToken} </h3>`
+  );
+
+  new ApiResponse(200, "Reset Password Link Sent Successfully").send(res);
+});
+
+//? http://localhost:9000/api/user/reset-password/2fc8c1cc4170c4047e7a2b229684d96a3fcc75f7a24d3eca3441aa92d046fae1
+
+
+export const resetPassword = asyncHandler(async (req, res, next) => {
+  const { resetPasswordToken } = req.params;
+  let resetPasswordTokenHashed = crypto
+    .createHash("sha256")
+    .update(resetPasswordToken)
+    .digest("hex");
+
+  const existingUser = await userModel.findOne({
+    passwordResetToken: resetPasswordTokenHashed,
+    passwordResetTokenExpiry: { $gt: Date.now() },
+  });
+
+  if (!existingUser) next(new CustomError(400, "Token Expired"));
+
+  existingUser.password = req.body.password;
+  await existingUser.save();
+
+  new ApiResponse(200, "Password Reset Successfully").send(res);
+});
