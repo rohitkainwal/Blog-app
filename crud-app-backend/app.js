@@ -1,5 +1,6 @@
 import express from "express"
 import userRoutes from "./src/routes/user.route.js"
+import PostRoutes from "./src/routes/post.route.js"
 import cookieParser from "cookie-parser"
 import { errorMiddleware } from "./src/middlewares/error.middleware.js";
 import cors from "cors"
@@ -15,6 +16,7 @@ app.use(cors({
 
 
 app.use("/api/user", userRoutes)
+app.use("/api/post", PostRoutes)
 
 app.use(errorMiddleware);
 export default app;
