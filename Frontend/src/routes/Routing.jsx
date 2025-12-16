@@ -7,6 +7,11 @@ import EmailVerify from "../pages/EmailVerify";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import TrendingPage from "../pages/TrendingPage";
+import SinglePost from "../pages/SinglePost";
+import CreatePost from "../pages/CreatePost";
+import AboutBlog from "../pages/AboutBlog"
+import ContactUs from "../pages/ContactUs";
+
 
 
 
@@ -41,8 +46,21 @@ export const myRoute = createBrowserRouter([
     element: <ResetPassword/>
   },
     {
-    path: "/reset-password/:token",
-    element: <ResetPassword/>
+    path: "/SinglePost/:id",
+    element: <SinglePost/>
   },
+  {
+    path: "/CreatePost",
+    element: <CreatePost/>
+  },
+  {
+    path: "/about",
+    element:<AboutBlog/>
+  },
+  {
+    path: "/contact",
+    element:<ContactUs/>
+  }
+
 
 ]);

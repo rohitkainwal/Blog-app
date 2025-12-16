@@ -4,7 +4,7 @@ import { FaPowerOff, FaEdit, FaBookReader } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
-import { api } from './../axios/axiosInstance';
+import { api } from "./../axios/axiosInstance";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -13,7 +13,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await api.post("/user/logout",{},{ withCredentials: true });
+      await api.post("/user/logout", {}, { withCredentials: true });
       toast.success("logout success");
       setUser(null);
       navigate("/login");
@@ -33,37 +33,57 @@ const Navbar = () => {
             <div className="font-extrabold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 tracking-wide">
               WriteHub
             </div>
-            <div className="text-xs text-gray-600 font-medium -mt-1">Share Your Story</div>
+            <div className="text-xs text-gray-600 font-medium -mt-1">
+              Share Your Story
+            </div>
           </div>
         </div>
       </Link>
 
       {pathname !== "/login" && pathname !== "/signup" && (
         <nav className="flex gap-8 font-bold text-green-700 uppercase">
-          <Link 
-            to="/" 
-            className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${pathname === "/" ? "text-emerald-600" : ""}`}
+          <Link
+            to="/"
+            className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${
+              pathname === "/" ? "text-emerald-600" : ""
+            }`}
           >
             Home
             {pathname === "/" && (
               <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full"></div>
             )}
           </Link>
-          <Link 
-            to="/trending" 
-            className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${pathname === "/trending" ? "text-emerald-600" : ""}`}
+          <Link
+            to="/trending"
+            className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${
+              pathname === "/trending" ? "text-emerald-600" : ""
+            }`}
           >
             Trending
             {pathname === "/trending" && (
               <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full"></div>
             )}
           </Link>
-          <Link 
-            to="/about" 
-            className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${pathname === "/about" ? "text-emerald-600" : ""}`}
+          <Link
+            to="/about"
+            className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${
+              pathname === "/about" ? "text-emerald-600" : ""
+            }`}
           >
             About
             {pathname === "/about" && (
+              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full"></div>
+            )}
+          </Link>
+
+          <Link
+            to="/contact"
+            className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${
+              pathname === "/contact" ? "text-emerald-600" : ""
+            }`}
+          >
+            Contact Us
+            {pathname === "/contact" && (
               <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full"></div>
             )}
           </Link>
@@ -73,13 +93,6 @@ const Navbar = () => {
       <div className="flex gap-4 items-center">
         {user ? (
           <>
-            <Link to="/write">
-              <button className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5">
-                <FaEdit size={16} />
-                Write
-              </button>
-            </Link>
-
             <div className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-green-200 to-emerald-200 rounded-2xl hover:from-green-300 hover:to-emerald-300 transition-all duration-300 shadow-lg hover:shadow-xl border border-green-300">
               <img
                 src={
@@ -101,8 +114,8 @@ const Navbar = () => {
               >
                 <FaPowerOff size={16} />
               </button>
-               
-              <ProfileDropdown/>
+
+              <ProfileDropdown />
             </div>
           </>
         ) : (

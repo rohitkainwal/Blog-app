@@ -1,6 +1,10 @@
 import React from 'react';
 import { useContext } from 'react';
 import { PostContext } from "../context/PostContext";
+import { Link } from 'react-router-dom';
+
+
+
 
 const PostCard = () => {
   const { posts } = useContext(PostContext);
@@ -26,12 +30,12 @@ const PostCard = () => {
           No posts found
         </p>
       ) : (
-        posts.map(({ title, content, createdAt, image, author }) => {
-          const { username, id, email } = author;
+       posts.map((post) => {
+  const { _id, title, content, createdAt, image, author } = post;
+  const { username } = author || {};
 
           return (
-            <div 
-              key={id}
+            <div key={_id}
               className="w-full flex bg-gradient-to-br from-white to-green-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-green-200 hover:border-green-400 overflow-hidden group transform hover:-translate-y-1"
             >
               {/* Image */}
@@ -78,15 +82,16 @@ const PostCard = () => {
                     </div>
                   </div>
 
-                  <button 
-                    onClick={() => window.location.href = `/post/${id}`}
+                  <Link to ={`/SinglePost/${_id}`}
+                 
+                  
                     className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
                   >
                     <span>Read More</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

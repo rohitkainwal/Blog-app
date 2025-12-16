@@ -8,23 +8,20 @@ export const PostContext = createContext();
 export const PostProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
 
-    const fetchPosts = async ()=>{
-          try {
-            const res = await api.get("post/get-posts")
-            console.log("POST API RESPONSE:", res.data);
-            setPosts(res.data.data);
-    
-  } catch (error) {
-    toast.error("data not fetched", error)
-  }
-
+  const fetchPosts = async () => {
+    try {
+      const res = await api.get("post/get-posts");
+      setPosts(res.data.data);
+    } catch (error) {
+      toast.error("data not fetched", error);
     }
+  };
 
-   useEffect( ()=>{
+  useEffect(() => {
     fetchPosts();
-   },[])
+  }, []);
   return (
-    <PostContext.Provider value={{ posts, setPosts,fetchPosts }}>
+    <PostContext.Provider value={{ posts, setPosts, fetchPosts }}>
       {children}
     </PostContext.Provider>
   );

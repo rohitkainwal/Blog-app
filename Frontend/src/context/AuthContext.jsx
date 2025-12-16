@@ -9,12 +9,8 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await api.get(
-        "/user/currentUser",
-        { withCredentials: true }
-      );
+      const res = await api.get("/user/currentUser");
       setUser(res.data.user);
-      console.log("✅ User fetched:", res.data.user);
     } catch (error) {
       console.log("❌ Fetch user error:", error);
       setUser(null);
