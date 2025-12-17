@@ -34,15 +34,35 @@ const SinglePost = () => {
         {/* Content */}
         <div className="p-8 md:p-12">
           {/* Meta Info */}
-          <div className="flex items-center gap-3 mb-4">
-            <span className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-bold rounded-full shadow-md">
+          <div className="flex items-center gap-3 mb-4 justify-between">
+            <div className="flex gap-3 ">
+ <span className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-bold rounded-full shadow-md">
               Article
             </span>
             {post.createdAt && (
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 align">
                 {new Date(post.createdAt).toDateString()}
               </span>
-            )}
+            )}     
+            </div>
+           
+<div>
+<button
+        onClick={() => navigate(`/edit-post/${post._id}`)}
+        className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition-all"
+      >
+        Edit
+      </button>
+
+      {/* Delete */}
+      <button
+        // onClick={handleDelete}
+        className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md transition-all"
+      >
+        Delete
+      </button>
+</div>
+            
           </div>
 
           {/* Title */}
@@ -70,6 +90,8 @@ const SinglePost = () => {
           <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
             {post.content}
           </div>
+           {/* Edit */}
+    
         </div>
       </div>
     </div>

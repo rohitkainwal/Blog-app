@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { PostContext } from "../context/PostContext";
 
-const CreatePost = () => {
+const EditPost = () => {
 const {fetchPosts} = useContext(PostContext)
 const navigate = useNavigate();
 const [formData , setFormData] = useState({
@@ -102,4 +102,4 @@ const handleSubmit = async (e)=>{
 
 };
 
-export default CreatePost;
+export default EditPost;

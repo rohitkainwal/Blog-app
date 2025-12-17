@@ -6,7 +6,6 @@ import SignupPage from "../pages/SignupPage";
 import EmailVerify from "../pages/EmailVerify";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
-import TrendingPage from "../pages/TrendingPage";
 import SinglePost from "../pages/SinglePost";
 import CreatePost from "../pages/CreatePost";
 import AboutBlog from "../pages/AboutBlog"
@@ -29,10 +28,7 @@ export const myRoute = createBrowserRouter([
     path: "/signup",
     element: <SignupPage />,
   },
-   {
-    path: "/trending",
-    element: <TrendingPage />,
-  },
+  
   {
     path: "/email-verify/:token",
     element: <EmailVerify />,
