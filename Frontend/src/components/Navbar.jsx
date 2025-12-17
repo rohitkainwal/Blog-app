@@ -53,17 +53,7 @@ const Navbar = () => {
               <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full"></div>
             )}
           </Link>
-          <Link
-            to="/trending"
-            className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${
-              pathname === "/trending" ? "text-emerald-600" : ""
-            }`}
-          >
-            Trending
-            {pathname === "/trending" && (
-              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full"></div>
-            )}
-          </Link>
+         
           <Link
             to="/about"
             className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${
