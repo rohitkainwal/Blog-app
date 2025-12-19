@@ -1,91 +1,122 @@
-import React, { useContext, useState } from 'react'
-import { AuthContext } from './../context/AuthContext';
-import toast from 'react-hot-toast';
-import { api } from '../axios/axiosInstance';
+import React, { useContext, useState } from "react";
+import { AuthContext } from "./../context/AuthContext";
+import toast from "react-hot-toast";
+import { api } from "../axios/axiosInstance";
+import { FaUser, FaEnvelope, FaPhone, FaTimes } from "react-icons/fa";
 
+const EditProfileModel = ({ onClose }) => {
+  const { user, setUser } = useContext(AuthContext);
 
-const EditProfileModel = ({onClose}) => {
-
-    const {user ,setUser} =useContext(AuthContext);
-
-    const [formData,setFormData] = useState({
+  const [formData, setFormData] = useState({
     username: user.username,
-     email: user.email,
-      contactNumber: user.contactNumber,
-  })
+    email: user.email,
+    contactNumber: user.contactNumber,
+  });
 
-  const handleChange = (e)=>{
-    setFormData({...formData, [e.target.name]:e.target.value});
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-    const handleEditProfile= async()=>{
+  const handleEditProfile = async () => {
     try {
-    const res= await api.patch("/user/updateProfile" , formData , {withCredentials:true}) 
-    toast.success("profile updated successfully")
-    setUser(res.data.user);
+      const res = await api.patch(
+        "/user/updateProfile",
+        formData,
+        { withCredentials: true }
+      );
 
-    onClose();
-
+      toast.success("Profile updated successfully");
+      setUser(res.data.user);
+      onClose();
     } catch (error) {
-       toast.error(error.response?.data?.message || "Update failed");
+      toast.error(error.response?.data?.message || "Update failed");
     }
-  }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center">
-      <div className="bg-white w-96 p-6 rounded-xl shadow-xl">
-        
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          Edit Profile
-        </h2>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+      <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 animate-fadeIn">
 
-        {/* Username */}
-        <label className="block text-sm mb-1">Name</label>
-        <input
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          className="w-full p-2 border rounded mb-3"
-        />
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        >
+          <FaTimes size={18} />
+        </button>
 
-        {/* Email */}
-        <label className="block text-sm mb-1">Email</label>
-        <input
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full p-2 border rounded mb-3"
-        />
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 mx-auto bg-green-100 text-green-600 rounded-full flex items-center justify-center text-2xl shadow">
+            <FaUser />
+          </div>
+          <h2 className="text-2xl font-extrabold text-gray-800 mt-4">
+            Edit Profile
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Update your personal information
+          </p>
+        </div>
 
-        {/* Phone */}
-        <label className="block text-sm mb-1">Phone</label>
-        <input
-          name="contactNumber"
-          value={formData.contactNumber}
-          onChange={handleChange}
-          className="w-full p-2 border rounded mb-4"
-        />
+        {/* Form */}
+        <div className="space-y-4">
 
-        {/* Buttons */}
-        <div className="flex justify-between mt-4">
+          {/* Username */}
+          <div className="relative">
+            <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="Full Name"
+              className="w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+            />
+          </div>
+
+          {/* Email */}
+          <div className="relative">
+            <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email Address"
+              className="w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+            />
+          </div>
+
+          {/* Phone */}
+          <div className="relative">
+            <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              name="contactNumber"
+              value={formData.contactNumber}
+              onChange={handleChange}
+              placeholder="Phone Number"
+              className="w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="mt-8 flex gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            className="w-1/2 py-3 rounded-xl border border-gray-300 text-gray-600 font-semibold hover:bg-gray-100 transition"
           >
             Cancel
           </button>
 
           <button
             onClick={handleEditProfile}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="w-1/2 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold shadow-lg hover:opacity-90 transition"
           >
             Save Changes
           </button>
         </div>
-
       </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default EditProfileModel
+export default EditProfileModel;

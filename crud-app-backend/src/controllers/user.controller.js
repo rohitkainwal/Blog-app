@@ -159,6 +159,15 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 
 // update User
 export const updateProfile = asyncHandler(async(req,res,next)=>{
+
+  // const {email}= req.body;
+
+  // const user = await userModel.findById(req.user._id);
+  // console.log(user)
+
+
+
+
   const updateUser = await userModel.findByIdAndUpdate(
     req.user._id,
     req.body,
@@ -168,8 +177,8 @@ export const updateProfile = asyncHandler(async(req,res,next)=>{
     }
   );
   if(!updateUser)next (new CustomError(404,"user not found "));
-  new ApiResponse(201, "user updated successfully", updateUser).send(res);
-})
+    new ApiResponse(200,isEmailChanged? "Email updated. Please verify your new email." : "User updated successfully", updateUser).send(res);
+});
 
 // update Password
 export const updatePassword = asyncHandler(async(req, res,next)=>{

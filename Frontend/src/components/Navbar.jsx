@@ -1,6 +1,5 @@
-import ProfileDropdown from "./ProfileDropdown";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaPowerOff, FaEdit, FaBookReader } from "react-icons/fa";
+import { FaPowerOff, FaEdit, FaEye, FaBookReader } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
@@ -53,7 +52,7 @@ const Navbar = () => {
               <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full"></div>
             )}
           </Link>
-         
+
           <Link
             to="/about"
             className={`hover:text-emerald-600 transition-colors duration-200 hover:scale-105 transform relative ${
@@ -84,14 +83,24 @@ const Navbar = () => {
         {user ? (
           <>
             <div className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-green-200 to-emerald-200 rounded-2xl hover:from-green-300 hover:to-emerald-300 transition-all duration-300 shadow-lg hover:shadow-xl border border-green-300">
-              <img
-                src={
-                  user.avatar ||
-                  "https://api.dicebear.com/7.x/avataaars/svg?seed=User"
-                }
-                alt={user.username}
-                className="w-11 h-11 rounded-full border-3 border-white shadow-md"
-              />
+              <div className="relative group w-11 h-11 cursor-pointer">
+                <img
+                  src={
+                    user.avatar ||
+                    "https://api.dicebear.com/7.x/avataaars/svg?seed=User"
+                  }
+                  alt={user.username}
+                  className="w-11 h-11 rounded-full border-2 border-white shadow-md object-cover"
+                />
+
+                <div
+                  className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center 
+                  opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                 <Link to ="/profile"> <FaEye className="text-white text-lg" /></Link>
+                </div>
+              </div>
+
               <div className="hidden md:block text-left">
                 <p className="text-sm font-bold text-gray-800">
                   {user.username}
@@ -104,8 +113,6 @@ const Navbar = () => {
               >
                 <FaPowerOff size={16} />
               </button>
-
-              <ProfileDropdown />
             </div>
           </>
         ) : (
