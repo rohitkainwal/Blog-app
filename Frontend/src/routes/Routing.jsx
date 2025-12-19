@@ -57,7 +57,7 @@ export const myRoute = createBrowserRouter([
   },
 
    {
-    path: "/edit-post",
+    path: "/edit/:id",
     element:<EditPost/>
   },
 
