@@ -12,6 +12,7 @@ import AboutBlog from "../pages/AboutBlog"
 import ContactUs from "../pages/ContactUs";
 import EditPost from "../pages/EditPost";
 import Profile from "../pages/Profile";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 
 
@@ -58,7 +59,12 @@ export const myRoute = createBrowserRouter([
 
    {
     path: "/edit/:id",
-    element:<EditPost/>
+    element:(
+<PrivateRoute>
+  <EditPost/>
+</PrivateRoute>
+    )
+    
   },
 
   {

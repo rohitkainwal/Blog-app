@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { FaPersonBooth } from "react-icons/fa";
+import { FaPersonBooth , FaImage} from "react-icons/fa";
 import Navbar from '../components/Navbar';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PostContext } from '../context/PostContext';
@@ -11,11 +11,13 @@ const EditPost = () => {
   const { posts, setPosts, fetchPosts } = useContext(PostContext);
   const navigate = useNavigate();
 
-  const [FormData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     title: "",
     content: "",
+    image:null,
   });
 
+  
   // Fetch posts on mount - MOVE TO TOP
   useEffect(() => {
     fetchPosts();
@@ -30,20 +32,38 @@ const EditPost = () => {
       setFormData({
         title: post.title,
         content: post.content,
+        image: post.image,
       });
     }
   }, [post]);
 
   const handleChange = (e) => {
-    setFormData({ ...FormData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   }
+
+  const handleImageChange = (e) => {
+  setFormData({
+    ...formData,
+    image: e.target.files[0],
+  });
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+
+      const data = new FormData();
+    data.append("title", formData.title);
+    data.append("content", formData.content);
+
+    // append image only if new image selected
+    if (formData.image instanceof File) {
+      data.append("image", formData.image);
+    }
       // FIX: Send FormData in the request
-      const res = await api.patch(`/post/edit/${id}`, FormData);
+      const res = await api.patch(`/post/edit/${id}`, data);
       console.log("EDIT RESPONSE 👉", res.data);
       
       // Handle different response structures
@@ -106,7 +126,7 @@ const EditPost = () => {
               className="w-full px-5 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-gray-50"
               type="text"
               name="title"
-              value={FormData.title}
+              value={formData.title}
               onChange={handleChange}
               id="title"
               placeholder="Enter post title"
@@ -122,12 +142,39 @@ const EditPost = () => {
             <textarea
               className="w-full px-5 py-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-gray-50 resize-none"
               name="content"
-              value={FormData.content}
+              value={formData.content}
               onChange={handleChange}
               id="content"
               rows={6}
               placeholder="Write your post content here..."
               required
+            />
+          </div>
+
+
+          
+                  {/* Image Upload */}
+          <div>
+            <label className="text-gray-700 font-semibold text-sm flex items-center gap-2 mb-2">
+              <FaImage className="text-green-600" />
+              Post Image
+            </label>
+          
+            <input
+              type="file"
+              name="image"
+              id="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full px-5 py-3 rounded-xl border-2 border-gray-200
+                         bg-gray-50 text-gray-600
+                         focus:outline-none focus:ring-2 focus:ring-green-500
+                         focus:border-transparent transition-all duration-200
+                         file:mr-4 file:py-2 file:px-4
+                         file:rounded-lg file:border-0
+                         file:text-sm file:font-semibold
+                         file:bg-green-100 file:text-green-700
+                         hover:file:bg-green-200"
             />
           </div>
 

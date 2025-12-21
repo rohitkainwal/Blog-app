@@ -28,16 +28,14 @@ const LoginPage = () => {
 
     try {
       const res = await api.post("/user/login", formData, { withCredentials: true });
-      console.log("✅ Login response:", res.data);
       await fetchUser();
-      console.log("✅ After fetchUser");
+     
       navigate("/");
+  
     } catch (error) {
-      console.log("❌ Login error:", error);
       toast.error(`❌ ${error.response?.data?.message}`);
     }
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       <Navbar />
@@ -184,5 +182,6 @@ const LoginPage = () => {
     </div>
   );
 };
+
 
 export default LoginPage;

@@ -29,7 +29,7 @@ const PostCard = () => {
         <p className="text-gray-500 col-span-full text-center">
           No posts found
         </p>
-      ) : (
+      ) : ( 
        posts.map((post) => {
   const { _id, title, content, createdAt, image, author } = post;
   const { username } = author || {};
@@ -39,10 +39,10 @@ const PostCard = () => {
               className="w-full flex bg-gradient-to-br from-white to-green-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-green-200 hover:border-green-400 overflow-hidden group transform hover:-translate-y-1"
             >
               {/* Image */}
-              <div className="h-56 w-56 flex-shrink-0 bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center relative overflow-hidden">
-                {image ? (
+              <div className="relative w-56 flex-shrink-0 overflow-hidden rounded-l-2xl bg-gradient-to-br from-green-100 to-emerald-100">
+                {image?.url? (
                   <img 
-                    src={image} 
+                    src={image.url} 
                     alt={title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />

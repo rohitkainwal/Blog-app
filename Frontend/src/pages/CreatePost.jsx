@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import Navbar from "./../components/Navbar";
-import { FaPersonBooth } from "react-icons/fa";
+import { FaPersonBooth, FaImage } from "react-icons/fa";
 import { api } from "../axios/axiosInstance";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -12,16 +12,27 @@ const navigate = useNavigate();
 const [formData , setFormData] = useState({
     title:"",    
     content:"",
+     image: null,
 });
 
 const handleChange = (e)=>{
     let {name, value}= e.target;
     setFormData({...formData, [name]:value});
 }
+const handleImageChange = (e) => {
+  setFormData({
+    ...formData,
+    image: e.target.files[0],
+  });
+};
 const handleSubmit = async (e)=>{
     e.preventDefault();
     try {
-        const res = await api.post("/post/create-post",formData) 
+        const res = await api.post("/post/create-post",formData,{
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }) 
       console.log(res.data)
      await fetchPosts();
      toast.success("post created successfully")
@@ -84,6 +95,31 @@ const handleSubmit = async (e)=>{
             placeholder="Write your post content here..."
           />
         </div>
+
+        {/* Image Upload */}
+<div>
+  <label className="text-gray-700 font-semibold text-sm flex items-center gap-2 mb-2">
+    <FaImage className="text-green-600" />
+    Post Image
+  </label>
+
+  <input
+    type="file"
+    name="image"
+    id="image"
+    accept="image/*"
+    onChange={handleImageChange}
+    className="w-full px-5 py-3 rounded-xl border-2 border-gray-200
+               bg-gray-50 text-gray-600
+               focus:outline-none focus:ring-2 focus:ring-green-500
+               focus:border-transparent transition-all duration-200
+               file:mr-4 file:py-2 file:px-4
+               file:rounded-lg file:border-0
+               file:text-sm file:font-semibold
+               file:bg-green-100 file:text-green-700
+               hover:file:bg-green-200"
+  />
+</div>
 
         {/* Submit Button */}
         <div className="flex justify-center pt-4">

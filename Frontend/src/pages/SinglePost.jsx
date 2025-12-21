@@ -1,15 +1,17 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { PostContext } from "../context/PostContext";
 import Navbar from "../components/Navbar";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { api } from "../axios/axiosInstance";
 import toast from "react-hot-toast";
+import { AuthContext } from "../context/AuthContext";
 
 const SinglePost = () => {
   const { id } = useParams();
   const { posts, fetchPosts } = useContext(PostContext);
   const navigate = useNavigate();
+  const {user} =useContext(AuthContext)
 
   useEffect(() => {
     fetchPosts();
@@ -39,8 +41,13 @@ const SinglePost = () => {
   }
 
   const handleDelete = async ()=>{
+
+    if(user=== null){
+      return <Navigate to="/login" replace/>,
+      toast.error("please login to delete post")
+    }
+
     const confirmDelete = window.confirm("Are you sure you want to delete this post?")
-    
     if(!confirmDelete)return;
     try {
       await api.delete(`/post/delete/${id}`)
@@ -58,10 +65,10 @@ const SinglePost = () => {
 
       <div className="max-w-5xl mx-auto px-4 py-10">
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-green-200">
-          {post.image && (
+          {post.image?.url && (
             <div className="w-full h-[420px] overflow-hidden">
               <img
-                src={post.image}
+                src={post.image.url}
                 alt={post.title}
                 className="w-full h-full object-cover"
               />
