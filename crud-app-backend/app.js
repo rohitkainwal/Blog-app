@@ -10,13 +10,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://blog-app-seven-weld-92.vercel.app/",
+    origin: [
+      "http://localhost:5173",
+      "https://blog-app-seven-weld-92.vercel.app",
+    ],
     credentials: true,
   })
 );
 
-app.use("/api/user", userRoutes);
-app.use("/api/post", PostRoutes);
+app.use("/user", userRoutes);
+app.use("/post", PostRoutes);
 
 app.use(errorMiddleware);
 export default app;
