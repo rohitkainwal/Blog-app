@@ -1,4 +1,4 @@
-import crypto  from 'crypto';
+import crypto from "crypto";
 import userModel from "../models/user.model.js";
 import asyncHandler from "express-async-handler";
 import ApiResponse from "../utils/ApiResponse.util.js";
@@ -23,12 +23,12 @@ export const userRegister = asyncHandler(async (req, res, next) => {
     contactNumber,
   });
 
-  let emailVerificationToken= newUser.generateEmailVerificationToken();
+  let emailVerificationToken = newUser.generateEmailVerificationToken();
   await newUser.save();
 
-  let verification_url = `http://localhost:5173/email-verify/${emailVerificationToken}`
+  let verification_url = `http://localhost:5173/email-verify/${emailVerificationToken}`;
 
-//! send a mail -->
+  //! send a mail -->
   await sendEmail(
     email,
     "Email Verification",
@@ -64,56 +64,58 @@ export const userRegister = asyncHandler(async (req, res, next) => {
 //~ http://localhost:9000/api/user/verify-email/2723f7db79d7e5cc92c42e4da2a18132e505e7a64a3e3dbbb040271e6b002a01
 
 //verifyEmail
-export const verifyEmail = asyncHandler(async (req,res,next)=>{
- let { emailToken } = req.params;
+export const verifyEmail = asyncHandler(async (req, res, next) => {
+  let { emailToken } = req.params;
   let hashedEmailToken = crypto
     .createHash("sha256")
     .update(emailToken)
     .digest("hex");
 
-    let user = await userModel.findOne({
-      emailVerificationToken: hashedEmailToken,
-      emailVerificationTokenExpiry:{ $gt: Date.now()},
-    });
-    if(!user)next(new CustomError(400, "token Expired"))
+  let user = await userModel.findOne({
+    emailVerificationToken: hashedEmailToken,
+    emailVerificationTokenExpiry: { $gt: Date.now() },
+  });
+  if (!user) next(new CustomError(400, "token Expired"));
 
-    if(user.isVerified) return next(new CustomError(400, "user already verified"));
+  if (user.isVerified)
+    return next(new CustomError(400, "user already verified"));
 
-    user.isVerified = true;
-    user.emailVerificationToken=undefined;  
-    user.emailVerificationTokenExpiry= undefined;
-    await user.save();
+  user.isVerified = true;
+  user.emailVerificationToken = undefined;
+  user.emailVerificationTokenExpiry = undefined;
+  await user.save();
 
-    new ApiResponse(200, "email verified successfully").send(res);
-
+  new ApiResponse(200, "email verified successfully").send(res);
 });
 
-export const resendEmailVerificationLink = asyncHandler(async(req,res,next)=>{
-  const {email} = req.body;
-   if (!email) {
-    return next(new CustomError(400, "Email is required"));
-  }
-  
-  let existingUser = await userModel.findOne({email});
+export const resendEmailVerificationLink = asyncHandler(
+  async (req, res, next) => {
+    const { email } = req.body;
+    if (!email) {
+      return next(new CustomError(400, "Email is required"));
+    }
 
-  if(existingUser.isVerified){
-   return next(new CustomError(400, "email already verified"));
-  }
+    let existingUser = await userModel.findOne({ email });
 
-  let emailVerificationToken = existingUser.generateEmailVerificationToken();
-  await existingUser.save();
+    if (existingUser.isVerified) {
+      return next(new CustomError(400, "email already verified"));
+    }
 
-  let verification_url = `http://localhost:5173/email-verify/${emailVerificationToken}`;
+    let emailVerificationToken = existingUser.generateEmailVerificationToken();
+    await existingUser.save();
 
-  //! send a mail -->
+    let verification_url = `http://localhost:5173/email-verify/${emailVerificationToken}`;
+
+    //! send a mail -->
     await sendEmail(
       email,
       "Email Verification",
       "Resend Verification Link",
       `<h1> this is for verification</h1> <a href="${verification_url}">Click Here</a> <h3> ${emailVerificationToken} </h3>`
     );
-  new ApiResponse(200, "Email Verification Link Sent Successfully").send(res);
-})
+    new ApiResponse(200, "Email Verification Link Sent Successfully").send(res);
+  }
+);
 
 // login user
 export const loginUser = asyncHandler(async (req, res, next) => {
@@ -124,7 +126,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   if (!existingUser) {
     return next(new CustomError(400, "user not found "));
   }
-  // 2. Compare password (IMPORTANT)
+  //  Compare password
   const isMatch = await existingUser.comparePassword(password);
   if (!isMatch) {
     throw new CustomError(400, "Invalid  password");
@@ -133,7 +135,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   let token = generateToken(existingUser._id);
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false, // localhost
+    secure: false,
     sameSite: "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
@@ -156,41 +158,35 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
   new ApiResponse(201, "user logged out successfully").send(res);
 });
 
-
 // update User
-export const updateProfile = asyncHandler(async(req,res,next)=>{
-
+export const updateProfile = asyncHandler(async (req, res, next) => {
   // const {email}= req.body;
 
   // const user = await userModel.findById(req.user._id);
   // console.log(user)
 
-
-
-
-  const updateUser = await userModel.findByIdAndUpdate(
-    req.user._id,
-    req.body,
-    {
-      new:true,
-      runValidators:true,
-    }
-  );
-  if(!updateUser)next (new CustomError(404,"user not found "));
-    new ApiResponse(200,isEmailChanged? "Email updated. Please verify your new email." : "User updated successfully", updateUser).send(res);
+  const updateUser = await userModel.findByIdAndUpdate(req.user._id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!updateUser) next(new CustomError(404, "user not found "));
+  new ApiResponse(
+    200,
+    isEmailChanged
+      ? "Email updated. Please verify your new email."
+      : "User updated successfully",
+    updateUser
+  ).send(res);
 });
 
 // update Password
-export const updatePassword = asyncHandler(async(req, res,next)=>{
+export const updatePassword = asyncHandler(async (req, res, next) => {
+  const existingUser = await userModel.findById(req.user._id);
 
-const existingUser = await userModel.findById(req.user._id)
+  existingUser.password = req.body.password;
+  await existingUser.save();
 
-
-existingUser.password = req.body.password;
-await existingUser.save();
-
-new ApiResponse(200, "password updated successfully").send(res);
-  
+  new ApiResponse(200, "password updated successfully").send(res);
 });
 
 export const forgotPassword = asyncHandler(async (req, res, next) => {
@@ -214,7 +210,6 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
 });
 
 //? http://localhost:9000/api/user/reset-password/2fc8c1cc4170c4047e7a2b229684d96a3fcc75f7a24d3eca3441aa92d046fae1
-
 
 export const resetPassword = asyncHandler(async (req, res, next) => {
   const { resetPasswordToken } = req.params;

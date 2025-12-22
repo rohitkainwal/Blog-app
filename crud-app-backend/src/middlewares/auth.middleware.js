@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import userModel from "../models/user.model.js";
-import asyncHandler  from "express-async-handler";
+import asyncHandler from "express-async-handler";
 import CustomError from "../utils/CustomError.util.js";
 
 export const authenticate = asyncHandler(async (req, res, next) => {

@@ -1,22 +1,22 @@
-import express from "express"
-import userRoutes from "./src/routes/user.route.js"
-import PostRoutes from "./src/routes/post.route.js"
-import cookieParser from "cookie-parser"
+import express from "express";
+import userRoutes from "./src/routes/user.route.js";
+import PostRoutes from "./src/routes/post.route.js";
+import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./src/middlewares/error.middleware.js";
-import cors from "cors"
+import cors from "cors";
 
 const app = express();
-app.use(express.json())
-app.use(cookieParser())
-app.use(cors({
-  origin: "http://localhost:5173",   // frontend ka proper URL
-  credentials: true,          // cookies allow
-}));
-// use the route
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
-
-app.use("/api/user", userRoutes)
-app.use("/api/post", PostRoutes)
+app.use("/api/user", userRoutes);
+app.use("/api/post", PostRoutes);
 
 app.use(errorMiddleware);
 export default app;

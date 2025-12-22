@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-  import crypto from "crypto";
+import crypto from "crypto";
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -82,24 +82,21 @@ userSchema.methods.comparePassword = async function (plainPassword) {
 };
 
 userSchema.methods.generateEmailVerificationToken = function () {
-
   try {
-     const randomBytes = crypto.randomBytes(32).toString("hex");
+    const randomBytes = crypto.randomBytes(32).toString("hex");
 
-  this.emailVerificationToken = crypto
-    .createHash("sha256") //? algorithm
-    .update(randomBytes) //? data to be hashed
-    .digest("hex"); //? op to be displayed
+    this.emailVerificationToken = crypto
+      .createHash("sha256") //? algorithm
+      .update(randomBytes) //? data to be hashed
+      .digest("hex"); //? op to be displayed
 
-  this.emailVerificationTokenExpiry = Date.now() + 10 * 60 * 1000;
+    this.emailVerificationTokenExpiry = Date.now() + 10 * 60 * 1000;
 
-  return randomBytes;
+    return randomBytes;
   } catch (error) {
     console.error("Error in generateEmailVerificationToken:", error);
     throw error;
   }
-
- 
 };
 
 userSchema.methods.generateResetPasswordToken = function () {
@@ -114,7 +111,6 @@ userSchema.methods.generateResetPasswordToken = function () {
 
   return randomBytes;
 };
-
 
 const userModel = mongoose.model("User", userSchema);
 export default userModel;
