@@ -18,8 +18,8 @@ app.use(
   })
 );
 
-app.use("/user", userRoutes);
-app.use("/post", PostRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/post", PostRoutes);
 
 app.use(errorMiddleware);
 export default app;
