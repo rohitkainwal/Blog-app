@@ -26,7 +26,7 @@ export const userRegister = asyncHandler(async (req, res, next) => {
   let emailVerificationToken = newUser.generateEmailVerificationToken();
   await newUser.save();
 
-  let verification_url = `http://localhost:5173/email-verify/${emailVerificationToken}`;
+  let verification_url = `https://blog-app-seven-weld-92.vercel.app/email-verify/${emailVerificationToken}`;
 
   //! send a mail -->
   await sendEmail(
@@ -104,7 +104,7 @@ export const resendEmailVerificationLink = asyncHandler(
     let emailVerificationToken = existingUser.generateEmailVerificationToken();
     await existingUser.save();
 
-    let verification_url = `http://localhost:5173/email-verify/${emailVerificationToken}`;
+    let verification_url = `https://blog-app-seven-weld-92.vercel.app/email-verify/${emailVerificationToken}`;
 
     //! send a mail -->
     await sendEmail(
@@ -197,7 +197,7 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
   let resetPasswordToken = existingUser.generateResetPasswordToken();
   await existingUser.save();
 
-  let resetPassword_url = `http://localhost:5173/reset-password/${resetPasswordToken}`;
+  let resetPassword_url = `https://blog-app-seven-weld-92.vercel.app/reset-password/${resetPasswordToken}`;
 
   await sendEmail(
     email,
