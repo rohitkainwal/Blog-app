@@ -80,7 +80,7 @@ export const verifyEmail = asyncHandler(async (req,res,next)=>{
       emailVerificationToken: hashedEmailToken,
       emailVerificationTokenExpiry:{ $gt: Date.now()},
     });
-    if(!user)next(new CustomError(400, "token Expired"))
+    if(!user) return next(new CustomError(400, "token Expired"))
 
     if(user.isVerified) return next(new CustomError(400, "user already verified"));
 
@@ -99,11 +99,15 @@ export const resendEmailVerificationLink = asyncHandler(async(req,res,next)=>{
     return next(new CustomError(400, "Email is required"));
   }
   
-  let existingUser = await userModel.findOne({email});
+  let existingUser = await userModel.findOne({ email });
 
-  if(existingUser.isVerified){
-   return next(new CustomError(400, "email already verified"));
-  }
+if (!existingUser) {
+  return next(new CustomError(404, "User not found"));
+}
+
+if (existingUser.isVerified) {
+  return next(new CustomError(400, "Email already verified"));
+}
 
   let emailVerificationToken = existingUser.generateEmailVerificationToken();
   await existingUser.save();
@@ -201,7 +205,9 @@ new ApiResponse(200, "password updated successfully").send(res);
 export const forgotPassword = asyncHandler(async (req, res, next) => {
   const { email } = req.body;
   let existingUser = await userModel.findOne({ email });
-  if (!existingUser) next(new CustomError(400, "Email Not Found"));
+  if (!existingUser) {
+  return next(new CustomError(400, "Email not found"));
+}
 
   let resetPasswordToken = existingUser.generateResetPasswordToken();
   await existingUser.save();
