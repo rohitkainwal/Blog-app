@@ -1,14 +1,17 @@
-import resend from "../config/resend.config.js";
+import getResend from "../config/resend.config.js";
 
 export const sendEmail = async (to, subject, text, html) => {
   console.log("Sending email to:", to);
   
   try {
+    const resend = getResend(); // ✅ Get instance when needed
+    
     const { data, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev', // Use this for testing, or your domain later
+      from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
       to,
       subject,
-      html, // Resend uses html directly
+      text,
+      html,
     });
 
     if (error) {

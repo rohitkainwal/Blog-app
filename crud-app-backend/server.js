@@ -1,8 +1,10 @@
-import app from "./app.js";
 import dotenv from "dotenv";
-import { connectDB } from "./src/config/database.config.js";
-
 dotenv.config();
+import app from "./app.js";
+import { connectDB } from "./src/config/database.config.js";
+// ✅ DEBUG: Check if loaded
+console.log("🔑 RESEND_API_KEY exists?", !!process.env.RESEND_API_KEY);
+console.log("🔑 First 10 chars:", process.env.RESEND_API_KEY?.substring(0, 10));
 const PORT = process.env.PORT;
 connectDB();
 
