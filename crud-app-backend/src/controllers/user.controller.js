@@ -152,9 +152,20 @@ export const loginUser = asyncHandler(async (req, res, next) => {
 
 // current User
 //~ this is for frontend --> check the success, if true means logged in, else not logged in then redirect client to login page or home page
-export const currentUser = asyncHandler(async (req, res) => {
-  if (!req.user) return res.status(401).json({ success: false });
-  res.json({ success: true, user: req.user });
+export const currentUser = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false });
+  }
+  
+  // Fetch the full user object from database
+  const user = await userModel.findById(req.user._id).select("-password");
+  
+  if (!user) {
+    return next(new CustomError(404, "User not found"));
+  }
+  
+  // Use your ApiResponse format for consistency
+  new ApiResponse(200, "User fetched successfully", user).send(res);
 });
 
 // logOut user

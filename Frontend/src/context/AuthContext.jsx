@@ -8,32 +8,35 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchUser = async () => {
-    // Check if token exists first
-    const token = localStorage.getItem("token");
-    
-    if (!token) {
-      console.log("❌ No token found");
-      setUser(null);
-      setLoading(false);
-      return;
-    }
-
     try {
       console.log("🔄 Fetching current user...");
       const res = await api.get("/user/currentUser");
-      console.log("✅ User fetched:", res.data.user);
-      setUser(res.data.user);
+      console.log("✅ Full response:", res.data);
+      
+      // ApiResponse structure: { statusCode, message, data }
+      if (res.data.data) {
+        setUser(res.data.data);
+        console.log("✅ User set:", res.data.data);
+      } else {
+        console.log("⚠️ No user data in response");
+        setUser(null);
+      }
     } catch (error) {
       console.log("❌ Fetch user error:", error.response?.data || error.message);
-      console.log("Status:", error.response?.status);
+      console.log("❌ Status:", error.response?.status);
       setUser(null);
-      
-      // Clear invalid token
-      if (error.response?.status === 401) {
-        localStorage.removeItem("token");
-      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await api.post("/user/logout");
+      setUser(null);
+    } catch (error) {
+      console.log("Logout error:", error);
+      setUser(null);
     }
   };
 
@@ -41,18 +44,8 @@ export const AuthProvider = ({ children }) => {
     fetchUser();
   }, []);
 
-  const login = (userData, token) => {
-    localStorage.setItem("token", token);
-    setUser(userData);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, setUser, fetchUser, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, fetchUser, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );
