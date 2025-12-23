@@ -4,7 +4,7 @@ import asyncHandler from "express-async-handler";
 import ApiResponse from "../utils/ApiResponse.util.js";
 import CustomError from "../utils/CustomError.util.js";
 import { generateToken } from "../utils/jwt.util.js";
-import { sendEmail } from "../utils/nodemailer.util.js";
+import { sendEmail } from "../utils/resend.util.js";
 
 // register user
 export const userRegister = asyncHandler(async (req, res, next) => {
@@ -31,35 +31,35 @@ export const userRegister = asyncHandler(async (req, res, next) => {
 //! send a mail -->
 
 try {
-  await sendEmail(
-    email,
-    "Email Verification",
-    "Sample Text",
-    `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
+  // In user.controller.js, your email template is already great!
+// But you can add a fallback text version:
+
+await sendEmail(
+  email,
+  "Email Verification",
+  `Hi ${email}, please verify your email using this link: ${verification_url}`, // text fallback
+  `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
     <h2 style="color: #333; text-align: center;">Verify Your Email</h2>
     <p style="font-size: 16px; color: #555;">
       Hi, <strong>${email}</strong>!<br/>
       Thank you for registering. Please verify your email address by clicking the button below.
     </p>
-
     <div style="text-align: center; margin: 30px 0;">
       <a href="${verification_url}" 
          style="padding: 12px 25px; background-color: #1d4ed8; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
          Verify Email
       </a>
     </div>
-
     <p style="font-size: 14px; color: #888; text-align: center;">
       Or copy this token manually if the button doesn't work: <br/>
       <strong>${emailVerificationToken}</strong>
     </p>
-
     <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;"/>
     <p style="font-size: 12px; color: #999; text-align: center;">
       This verification link will expire in 1 hour. If you did not request this email, please ignore it.
     </p>
   </div>`
-  );
+);
 } catch (error) {
   console.error("Email sending failed:", error.message);
 }
