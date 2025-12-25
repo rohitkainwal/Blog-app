@@ -12,7 +12,7 @@ export const sendEmail = async (to, subject, text, html) => {
     const resend = getResend(); // ✅ Get instance when needed
     
     const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
+      from: process.env.RESEND_FROM_EMAIL || 'support@send.rorprojects.site',
       to,
       subject,
       text,
