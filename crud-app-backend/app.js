@@ -13,6 +13,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://blog-app-seven-weld-92.vercel.app",
+      "https://www.rorprojects.site"
     ],
     credentials: true,
   })
