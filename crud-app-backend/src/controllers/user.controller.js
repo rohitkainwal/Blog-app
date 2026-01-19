@@ -141,13 +141,17 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   }
 
   let token = generateToken(existingUser._id);
- res.cookie("token", token, {
+const isProd = process.env.NODE_ENV === "production";
+
+res.cookie("token", token, {
   httpOnly: true,
-  secure: true,        // ✅ MUST be true in production
-  sameSite: "None",    // ✅ REQUIRED for Vercel ↔ Railway
+  secure: isProd,                     // false in local, true in prod
+  sameSite: isProd ? "None" : "Lax",  // cross-site only in prod
   maxAge: 7 * 24 * 60 * 60 * 1000,
-  domain: '.rorprojects.site',
-});
+  ...(isProd && { domain: ".rorprojects.site" }),
+}); 
+
+
 
   new ApiResponse(201, "user logged in successfully", existingUser).send(res);
 });
