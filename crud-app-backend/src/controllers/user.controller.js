@@ -149,7 +149,8 @@ res.cookie("token", token, {
   sameSite: isProd ? "None" : "Lax",  // cross-site only in prod
   maxAge: 7 * 24 * 60 * 60 * 1000,
   ...(isProd && { domain: ".rorprojects.site" }),
-});
+}); 
+
 
 
   new ApiResponse(201, "user logged in successfully", existingUser).send(res);
