@@ -1,1 +1,77 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@tailwind utilities;
+
+:root {
+  --color-primary: 34 197 94;
+}
+
+.text-primary { color: rgb(var(--color-primary)); }
+.bg-primary { background-color: rgb(var(--color-primary)); }
+.border-primary { border-color: rgb(var(--color-primary)); }
+
+
+
+
+.blob-outer-container {
+    z-index: -1;
+    filter: blur(100px);
+    opacity: 0.1;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    position: fixed;
+    inset: 0;
+}
+
+.blob-inner-container {
+    background-color: #fff;
+    border-radius: 99999px;
+    width: 100vw;
+    min-width: 1000px;
+    height: 100vh;
+    margin: auto;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    transform: scale(.8);
+}
+
+.blob {
+    background: conic-gradient(#08f,#f60,#bbffa1,#4c00ff,#ab2666,#09f);
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    animation: 8s linear infinite spinBlob;
+    position: absolute;
+    inset: 0;
+}
+
+@keyframes spinBlob {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease forwards;
+}
