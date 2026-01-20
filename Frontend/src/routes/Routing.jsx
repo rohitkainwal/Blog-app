@@ -8,11 +8,10 @@ import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import SinglePost from "../pages/SinglePost";
 import CreatePost from "../pages/CreatePost";
-import AboutBlog from "../pages/AboutBlog"
-import ContactUs from "../pages/ContactUs";
 import EditPost from "../pages/EditPost";
 import Profile from "../pages/Profile";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import AllPosts from "../pages/AllPosts";
 
 
 
@@ -53,9 +52,10 @@ export const myRoute = createBrowserRouter([
     element: <CreatePost/>
   },
   {
-    path: "/about",
-    element:<AboutBlog/>
+    path: "/all-posts",
+    element: <AllPosts/>
   },
+ 
 
    {
     path: "/edit/:id",
@@ -67,10 +67,7 @@ export const myRoute = createBrowserRouter([
     
   },
 
-  {
-    path: "/contact",
-    element:<ContactUs/>
-  },
+ 
 
    {
     path: "/profile",

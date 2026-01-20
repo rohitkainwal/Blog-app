@@ -30,7 +30,7 @@ const LoginPage = () => {
       const res = await api.post("/user/login", formData, { withCredentials: true });
       await fetchUser();
      
-      navigate("/");
+      navigate("/all-posts");
   
     } catch (error) {
       toast.error(`❌ ${error.response?.data?.message}`);

@@ -1,7 +1,7 @@
-import React from 'react';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { PostContext } from "../context/PostContext";
 import { Link } from 'react-router-dom';
+import { FaRegClock, FaArrowRight, FaFeatherPointed } from 'react-icons/fa6'; // Updated icons
 
 const PostCard = () => {
   const { posts } = useContext(PostContext);
@@ -11,94 +11,108 @@ const PostCard = () => {
     const posted = new Date(createdAt);
     const diffInHours = Math.floor((now - posted) / (1000 * 60 * 60));
     
-    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    if (diffInHours < 24) return `${diffInHours}h ago`;
     const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays === 1) return '1 day ago';
-    if (diffInDays < 7) return `${diffInDays} days ago`;
-    const diffInWeeks = Math.floor(diffInDays / 7);
-    if (diffInWeeks === 1) return '1 week ago';
-    return `${diffInWeeks} weeks ago`;
+    if (diffInDays < 7) return `${diffInDays}d ago`;
+    return `${Math.floor(diffInDays / 7)}w ago`;
   };
 
-  return (
-    <div className="grid gap-4 md:gap-6 p-4 md:p-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
-      {posts.length === 0 ? (
-        <p className="text-gray-500 col-span-full text-center py-12">
-          No posts found
-        </p>
-      ) : ( 
-       posts.map((post) => {
-          const { _id, title, content, createdAt, image, author } = post;
-          const { username } = author || {};
+  if (!posts || posts.length === 0) {
+    return (
+      <div className="col-span-full flex flex-col items-center justify-center py-32 px-6 text-center">
+        <div className="w-20 h-20 mb-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-3xl">
+          <FaFeatherPointed className="text-zinc-400" />
+        </div>
+        <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">The ink has yet to dry</h3>
+        <p className="text-zinc-500 max-w-xs mx-auto">We're waiting for the first story to be told. Why not start yours today?</p>
+      </div>
+    );
+  }
 
-          return (
-            <div key={_id}
-              className="w-full flex flex-col sm:flex-row bg-gradient-to-br from-white to-green-50 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-green-200 hover:border-green-400 overflow-hidden group transform hover:-translate-y-1"
-            >
-              {/* Image */}
-              <div className="relative w-full sm:w-48 md:w-56 h-48 sm:h-auto flex-shrink-0 overflow-hidden sm:rounded-l-2xl bg-gradient-to-br from-green-100 to-emerald-100">
+  return (
+    <>
+      {posts.map((post) => {
+        const { _id, title, content, createdAt, image, author } = post;
+        const { username, avatar } = author || {};
+
+        return (
+          <article 
+            key={_id}
+            className="group relative flex flex-col bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 rounded-[2.5rem] p-4 transition-all duration-500 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)]"
+          >
+            {/* Image Section */}
+            <div className="relative h-72 w-full overflow-hidden rounded-[2rem] bg-zinc-100 dark:bg-zinc-800">
+              <Link to={`/SinglePost/${_id}`}>
                 {image?.url ? (
                   <img 
                     src={image.url} 
                     alt={title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <span className="text-green-600 text-5xl md:text-6xl">📝</span>
+                  <div className="w-full h-full flex items-center justify-center opacity-40">
+                    <FaFeatherPointed size={40} />
                   </div>
                 )}
+                
+                {/* Overlay Badge */}
+                <div className="absolute top-4 left-4 backdrop-blur-md bg-white/70 dark:bg-black/40 px-4 py-1.5 rounded-full border border-white/20">
+                   <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-900 dark:text-white">
+                    Featured
+                   </span>
+                </div>
+              </Link>
+            </div>
+
+            {/* Content Section */}
+            <div className="px-4 pt-6 pb-4 flex flex-col flex-1">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-400 uppercase tracking-wider">
+                  <FaRegClock className="text-primary text-sm" />
+                  {timeAgo(createdAt)}
+                </div>
+                <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+                <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">5 min read</span>
               </div>
 
-              {/* Content */}
-              <div className="p-4 md:p-6 space-y-3 flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-xs font-bold shadow-md">
-                      Article
-                    </span>
-                    {createdAt && (
-                      <span className="text-gray-500 text-xs">{timeAgo(createdAt)}</span>
-                    )}
+              <Link to={`/SinglePost/${_id}`}>
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-3 leading-[1.2] hover:text-primary transition-colors line-clamp-2">
+                  {title}
+                </h2>
+              </Link>
+
+              <p className="text-zinc-500 dark:text-zinc-400 text-[0.95rem] leading-relaxed line-clamp-3 mb-8">
+                {content}
+              </p>
+
+              {/* Footer */}
+              <div className="mt-auto flex items-center justify-between pt-6 border-t border-zinc-100 dark:border-zinc-800/50">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10">
+                    <img 
+                      src={avatar || `https://ui-avatars.com/api/?name=${username}&background=random`} 
+                      alt={username} 
+                      className="w-full h-full rounded-full object-cover ring-2 ring-zinc-50 dark:ring-zinc-800" 
+                    />
                   </div>
-
-                  <h2 className="text-left text-lg sm:text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-green-600 transition-colors duration-300 mb-2">
-                    {title}
-                  </h2>
-
-                  <p className="text-sm text-gray-600 line-clamp-2 sm:line-clamp-3 text-left leading-relaxed mb-3">
-                    {content}
-                  </p>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-zinc-400">Written by</span>
+                    <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{username || 'Anonymous'}</span>
+                  </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-3 border-t border-green-100">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md flex-shrink-0">
-                      {username ? username.charAt(0).toUpperCase() : 'U'}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-800 truncate max-w-[150px] sm:max-w-none">
-                        By {username || 'Unknown'}
-                      </p>
-                    </div>
-                  </div>
-
-                  <Link 
-                    to={`/SinglePost/${_id}`}
-                    className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <span>Read More</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </Link>
-                </div>
+                <Link 
+                  to={`/SinglePost/${_id}`}
+                  className="w-12 h-12 rounded-full bg-zinc-900 dark:bg-white flex items-center justify-center text-white dark:text-zinc-900 hover:bg-primary hover:text-white transition-all duration-300"
+                >
+                  <FaArrowRight />
+                </Link>
               </div>
             </div>
-          );
-        })
-      )}
-    </div>
+          </article>
+        );
+      })}
+    </>
   );
 };
 
