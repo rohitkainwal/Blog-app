@@ -1,135 +1,179 @@
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { PostContext } from "../context/PostContext";
+import { AuthContext } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaArrowLeft } from "react-icons/fa";
 import { api } from "../axios/axiosInstance";
 import toast from "react-hot-toast";
-import { AuthContext } from "../context/AuthContext";
 
 const SinglePost = () => {
   const { id } = useParams();
-  const { posts, fetchPosts } = useContext(PostContext);
   const navigate = useNavigate();
-  const {user} =useContext(AuthContext)
+  const { posts, fetchPosts } = useContext(PostContext);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  // Add null check for posts
   const post = (posts || []).find((p) => p._id === id);
 
-  // Loading state
+  /* -------------------- STATES -------------------- */
   if (!posts) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+      <div className="min-h-screen bg-white dark:bg-zinc-950">
         <Navbar />
-        <p className="text-center mt-20">Loading...</p>
+        <p className="text-center mt-24 text-zinc-500">Loading post…</p>
       </div>
     );
   }
 
-  // Post not found
   if (!post) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+      <div className="min-h-screen bg-white dark:bg-zinc-950">
         <Navbar />
-        <p className="text-center mt-20 text-red-600">Post not found</p>
+        <p className="text-center mt-24 text-red-500">Post not found</p>
       </div>
     );
   }
 
-  const handleDelete = async ()=>{
-
-    if(user=== null){
-      return <Navigate to="/login" replace/>,
-      toast.error("please login to delete post")
+  /* -------------------- DELETE -------------------- */
+  const handleDelete = async () => {
+    if (!user) {
+      toast.error("Please login to delete post");
+      navigate("/login");
+      return;
     }
 
-    const confirmDelete = window.confirm("Are you sure you want to delete this post?")
-    if(!confirmDelete)return;
+    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
     try {
-      await api.delete(`/post/delete/${id}`)
-      
-      toast.success("post deleted")
-      navigate("/")
-      
-    } catch (error) {
-      toast.error("post deleted failed")
+      await api.delete(`/post/delete/${id}`);
+      toast.success("Post deleted successfully");
+      navigate("/");
+    } catch {
+      toast.error("Failed to delete post");
     }
-  }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+    <div className="min-h-screen bg-white dark:bg-zinc-950">
+      {/* ---------------- NAVBAR ---------------- */}
       <Navbar />
 
-      <div className="max-w-5xl mx-auto px-4 py-10">
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-green-200">
-          {post.image?.url && (
-            <div className="w-full h-[420px] overflow-hidden">
-              <img
-                src={post.image.url}
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
+      {/* ---------------- BACK BUTTON ---------------- */}
+      <div className="max-w-5xl mx-auto px-4 pt-6">
+        <button
+          onClick={() => navigate("/")}
+          className="
+            inline-flex items-center gap-2
+            px-4 py-2 rounded-full
+            border text-sm font-medium
+            bg-white dark:bg-zinc-900
+            border-zinc-200 dark:border-zinc-800
+            hover:shadow-md transition
+          "
+          style={{ color: `rgb(var(--color-primary))` }}
+        >
+          <FaArrowLeft size={13} />
+          All Posts
+        </button>
+      </div>
 
-          <div className="p-8 md:p-12">
-            <div className="flex items-center gap-3 mb-4 justify-between">
-              <div className="flex gap-3">
-                <span className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-bold rounded-full shadow-md">
-                  Article
-                </span>
-                {post.createdAt && (
-                  <span className="text-sm text-gray-500 flex items-center">
-                    {new Date(post.createdAt).toDateString()}
-                  </span>
-                )}
-              </div>
+      {/* ---------------- HERO ---------------- */}
+      <div className="relative w-full h-[60vh] max-h-[520px] mt-6">
+        {post.image?.url && (
+          <img
+            src={post.image.url}
+            alt={post.title}
+            className="w-full h-full object-cover"
+          />
+        )}
 
-              <div className="flex gap-3">
-                <button
-                  onClick={() => navigate(`/edit/${post._id}`)}
-                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all duration-300"
-                  title="Edit Post"
-                >
-                  <FaEdit size={18} />
-                </button>
+        <div className="absolute inset-0 bg-black/30" />
 
-                <button 
-                  onClick={()=> handleDelete(post._id)}
-                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white shadow-md hover:shadow-lg transition-all duration-300"
-                  title="Delete Post"
-                >
-                  <FaTrash size={17} />
-                </button>
-              </div>
-            </div>
+        <div className="absolute bottom-0 left-0 right-0 px-4 pb-8 md:px-12 text-white">
+          <span
+            className="inline-block px-4 py-1 rounded-full text-xs font-semibold mb-4"
+            style={{ backgroundColor: `rgb(var(--color-primary))` }}
+          >
+            ARTICLE
+          </span>
 
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-snug mb-6">
-              {post.title}
-            </h1>
+          <h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-4xl">
+            {post.title}
+          </h1>
 
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
-                {post.author?.username?.charAt(0).toUpperCase() || "U"}
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-800">
-                  {post.author?.username || "Unknown Author"}
-                </p>
-                <p className="text-xs text-gray-500">Author</p>
-              </div>
-            </div>
-
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-green-300 to-transparent mb-8"></div>
-
-            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-              {post.content}
-            </div>
+          <div className="flex items-center gap-3 mt-4 text-sm opacity-90">
+            <span>{post.author?.username || "Unknown Author"}</span>
+            <span>•</span>
+            <span>{new Date(post.createdAt).toDateString()}</span>
           </div>
         </div>
+      </div>
+
+      {/* ---------------- CONTENT ---------------- */}
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* ACTION BAR */}
+         <div className="flex justify-end gap-3 mb-6">
+          <button
+            onClick={() => navigate(`/edit/${post._id}`)}
+            className="
+              w-11 h-11 flex items-center justify-center
+              rounded-xl text-white transition
+            "
+            style={{ backgroundColor: `rgb(var(--color-primary))` }}
+            title="Edit Post"
+          >
+            <FaEdit size={16} />
+          </button>
+
+          <button
+            onClick={handleDelete}
+            className="
+              w-11 h-11 flex items-center justify-center
+              rounded-xl bg-red-500 hover:bg-red-600
+              text-white transition
+            "
+            title="Delete Post"
+          >
+            <FaTrash size={15} />
+          </button>
+        </div>
+
+        {/* AUTHOR */}
+        <div className="flex items-center gap-4 mb-10 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
+          <div
+            className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg"
+            style={{ backgroundColor: `rgb(var(--color-primary))` }}
+          >
+            {post.author?.username?.charAt(0).toUpperCase() || "U"}
+          </div>
+
+          <div>
+            <p className="font-semibold text-zinc-900 dark:text-zinc-100">
+              {post.author?.username || "Unknown Author"}
+            </p>
+            <p className="text-xs text-zinc-500">Author</p>
+          </div>
+        </div>
+
+        {/* DIVIDER */}
+        <div
+          className="h-[2px] w-full mb-10 rounded-full"
+          style={{
+            background: `linear-gradient(90deg, transparent, rgb(var(--color-primary)), transparent)`
+          }}
+        />
+
+        {/* ARTICLE CONTENT */}
+        <article className="prose prose-lg max-w-none dark:prose-invert">
+          <p className="whitespace-pre-line text-zinc-700 dark:text-zinc-300">
+            {post.content}
+          </p>
+        </article>
       </div>
     </div>
   );

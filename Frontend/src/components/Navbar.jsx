@@ -63,7 +63,7 @@ const Navbar = () => {
               </button>
 
               {isPickerOpen && (
-                <div className="absolute right-0 mt-3 z-50">
+                <div className="absolute left-15 top-0 mt-0 z-50">
                   <ThemeColorPicker close={() => setIsPickerOpen(false)} />
                 </div>
               )}
