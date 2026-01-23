@@ -7,124 +7,210 @@ import BackgroundBlob from "../components/BackgroundBlob";
 import { AuthContext } from "../context/AuthContext";
 
 const HomePage = () => {
-
   const {user} = useContext(AuthContext)
   const destination = user ? "/all-posts" : "/login";
+  
   return (
-    <div className="bg-gradient-to-b from-white via-zinc-50 to-zinc-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 min-h-screen transition-colors duration-500 antialiased selection:bg-zinc-100 dark:selection:bg-zinc-800">
+    <div className="relative bg-white dark:bg-black min-h-screen antialiased selection:bg-purple-500/20 dark:selection:bg-purple-500/20 transition-colors duration-500">
+      {/* Animated gradient background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse opacity-20 dark:opacity-30"
+          style={{ backgroundColor: 'rgb(var(--color-primary))' }}></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse opacity-15 dark:opacity-20"
+          style={{ 
+            backgroundColor: 'rgb(var(--color-primary))',
+            animationDelay: '1s'
+          }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl opacity-10"
+          style={{ backgroundColor: 'rgb(var(--color-primary))' }}></div>
+      </div>
+      
       <BackgroundBlob/>
       <Navbar />
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-28 pb-20 lg:pt-40 lg:pb-36 px-6 overflow-hidden">
-        {/* Gradient glow background */}
-        <div className="absolute inset-0 -z-10">
-          <div
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] opacity-[0.08] dark:opacity-[0.12] blur-[100px] rounded-full"
+      <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-40 px-6 overflow-hidden">
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_110%)]"></div>
+        
+        <div className="relative max-w-5xl mx-auto text-center">
+          {/* Tagline with gradient border */}
+          <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full backdrop-blur-sm border text-xs font-semibold tracking-wider uppercase mb-12 group transition-all duration-300 shadow-sm dark:shadow-none hover:shadow-md hover:scale-105"
             style={{
-              background: `radial-gradient(circle, rgb(var(--color-primary)), transparent 70%)`,
-            }}
-          />
-        </div>
-
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Tagline pill */}
-          <div  className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 text-[11px] font-medium tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-600 mb-10 bg-green-300 ">
-            <span className="text-[rgb(var(--color-primary))]">The Platform for Builders</span>
-            <FaArrowRight size={10} className="text-[rgb(var(--color-primary))] " />
+              backgroundColor: 'rgba(var(--color-primary), 0.1)',
+              borderColor: 'rgba(var(--color-primary), 0.3)',
+            }}>
+            <span style={{ color: 'rgb(var(--color-primary))' }}>
+              The Platform for Builders
+            </span>
+            <FaArrowRight size={10} className="group-hover:translate-x-1 transition-transform duration-300" style={{ color: 'rgb(var(--color-primary))' }} />
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-zinc-900 dark:text-white mb-6 leading-tight">
-            Space for your{" "}
-            <span className="text-zinc-400 dark:text-zinc-600 italic font-light">
-              mind to breathe
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
+            <span className="text-gray-900 dark:text-white">
+              Space for your
             </span>
-            .
+            <br />
+            <span className="relative inline-block mt-4">
+              <span className="italic font-light" style={{ color: 'rgb(var(--color-primary))' }}>
+                mind to breathe
+              </span>
+              <div className="absolute -bottom-2 left-0 right-0 h-1 blur-sm" 
+                style={{ 
+                  background: `linear-gradient(to right, rgba(var(--color-primary), 0.5), rgba(var(--color-primary), 0.3))` 
+                }}></div>
+            </span>
+            <span className="text-gray-900 dark:text-white">.</span>
           </h1>
 
-          <p className="text-base md:text-lg text-zinc-600 dark:text-zinc-400 mb-10 max-w-xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-600 dark:text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
             A minimalist sanctuary for your daily thoughts and deep dives. Capture
             what matters, leave the noise behind.
           </p>
 
           <Link to={destination}>
-            <button
-              className=" inline-flex items-center px-8 py-3 text-sm text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
-              style={{ backgroundColor: `rgb(var(--color-primary))` }}
-            >
-             <span>Start Writing  </span> <FaArrowRight size={10} className="text-white" />
+            <button className="group relative inline-flex items-center gap-3 px-10 py-4 text-base font-semibold text-white rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              style={{
+                backgroundColor: 'rgb(var(--color-primary))',
+                boxShadow: '0 0 40px rgba(var(--color-primary), 0)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 20px 60px rgba(var(--color-primary), 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 40px rgba(var(--color-primary), 0)';
+              }}>
+              <span className="relative">Start Writing</span>
+              <FaArrowRight size={14} className="relative group-hover:translate-x-1 transition-transform" />
             </button>
           </Link>
         </div>
       </section>
 
       {/* --- ABOUT SECTION --- */}
-      <section className="max-w-4xl mx-auto px-6 py-16 text-center">
-        <h2 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
-          Why this platform?
-        </h2>
-        <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-          We believe writing should be simple, distraction-free, and meaningful.
-          Whether it’s a quick note or a long essay, our tools help you focus on
-          clarity and creativity.
-        </p>
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <div className="relative p-12 rounded-3xl bg-white/60 dark:bg-white/5 backdrop-blur-md overflow-hidden group hover:bg-white/80 dark:hover:bg-white/10 transition-all duration-500 shadow-xl dark:shadow-none"
+          style={{
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: 'rgba(var(--color-primary), 0.2)',
+          }}>
+          <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700 opacity-10 dark:opacity-20"
+            style={{ backgroundColor: 'rgb(var(--color-primary))' }}></div>
+          
+          <div className="relative text-center">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
+              Why this platform?
+            </h2>
+            <p className="text-gray-700 dark:text-white/70 leading-relaxed max-w-2xl mx-auto text-lg">
+              We believe writing should be simple, distraction-free, and meaningful.
+              Whether it's a quick note or a long essay, our tools help you focus on
+              clarity and creativity.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* --- CONTENT SECTION --- */}
-      <main className="max-w-5xl mx-auto px-6 py-16">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-4">
+      <main className="max-w-6xl mx-auto px-6 py-20">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
           <div>
-            <h2 className="text-2xl font-semibold text-zinc-900 dark:text-white">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">
               Recent Entries
             </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-base text-gray-600 dark:text-white/50">
               Thoughtful perspectives from our community.
             </p>
           </div>
           <Link to={destination}
-            className="group flex items-center gap-2 text-xs font-semibold uppercase text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
-          >
-            View Archive
+            className="group flex items-center gap-2.5 text-sm font-semibold uppercase text-gray-500 dark:text-white/40 hover:text-gray-900 dark:hover:text-white transition-all duration-300">
+            <span className="relative group-hover:opacity-100 transition-opacity">
+              View Archive
+              <span className="absolute -bottom-1 left-0 w-0 h-px group-hover:w-full transition-all duration-300"
+                style={{ backgroundColor: 'rgb(var(--color-primary))' }}></span>
+            </span>
             <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <PostCard />
         </div>
 
         {/* Callout */}
-        <div className="mt-32 p-10 md:p-16 rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-center">
-          <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-3">
-            Ready to share your story?
-          </h3>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto mb-8 leading-relaxed">
-            Join a community of writers who value quality over quantity.
-          </p>
-          <Link
-            to={destination}
-            className="inline-block px-6 py-2 border border-zinc-900 dark:border-white text-zinc-900 dark:text-white rounded-full text-sm font-medium hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-zinc-900 transition-all"
-          >
-            Create Post
-          </Link>
+        <div className="relative mt-32 p-12 md:p-20 rounded-3xl overflow-hidden group"
+          style={{
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: 'rgba(var(--color-primary), 0.2)',
+          }}>
+          <div className="absolute inset-0 backdrop-blur-md opacity-60"
+            style={{ backgroundColor: 'rgba(var(--color-primary), 0.05)' }}></div>
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700"
+            style={{ backgroundColor: 'rgba(var(--color-primary), 0.1)' }}></div>
+          
+          <div className="relative text-center">
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+              Ready to share your story?
+            </h3>
+            <p className="text-base text-gray-700 dark:text-white/60 max-w-lg mx-auto mb-10 leading-relaxed">
+              Join a community of writers who value quality over quantity.
+            </p>
+            <Link to={destination}>
+              <button className="group/btn relative inline-flex items-center px-8 py-3.5 rounded-full text-sm font-semibold overflow-hidden transition-all duration-300 hover:scale-105"
+                style={{
+                  borderWidth: '2px',
+                  borderStyle: 'solid',
+                  borderColor: 'rgba(var(--color-primary), 0.3)',
+                  color: 'rgb(var(--color-primary))',
+                }}>
+                <span className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-all duration-300"
+                  style={{ backgroundColor: 'rgba(var(--color-primary), 0.1)' }}></span>
+                <span className="relative">Create Post</span>
+              </button>
+            </Link>
+          </div>
         </div>
       </main>
 
       {/* --- FOOTER --- */}
-      <footer className="px-6 py-20 border-t border-zinc-200 dark:border-zinc-800">
-        <div className="max-w-sm mx-auto text-center">
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-zinc-500 mb-6">
+      <footer className="px-6 py-24 border-t border-gray-200 dark:border-white/10">
+        <div className="max-w-md mx-auto text-center">
+          <h2 className="text-xs font-bold tracking-[0.3em] uppercase text-gray-500 dark:text-white/40 mb-8">
             Newsletter
           </h2>
           <div className="relative group">
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="w-full pl-5 pr-28 py-3 rounded-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 text-sm focus:ring-2 ring-primary/30 outline-none transition-all"
-            />
-            <button className="absolute right-2 top-2 bottom-2 px-5 bg-zinc-900 dark:bg-white dark:text-zinc-900 text-white font-medium text-xs uppercase rounded-full hover:opacity-90 transition-opacity">
-              Join
-            </button>
+            <div className="absolute -inset-0.5 rounded-full blur opacity-20 dark:opacity-30 group-hover:opacity-40 dark:group-hover:opacity-60 transition-opacity duration-300"
+              style={{ backgroundColor: 'rgb(var(--color-primary))' }}></div>
+            <div className="relative flex">
+              <input
+                type="email"
+                placeholder="Your email address"
+                className="flex-1 pl-6 pr-32 py-4 rounded-full bg-white/80 dark:bg-white/5 backdrop-blur-md border text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none transition-all"
+                style={{
+                  borderColor: 'rgba(var(--color-primary), 0.2)',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(var(--color-primary), 0.5)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(var(--color-primary), 0.2)';
+                }}
+              />
+              <button className="absolute right-2 top-2 bottom-2 px-6 text-white font-semibold text-xs uppercase rounded-full hover:shadow-lg transition-all duration-300 hover:scale-105"
+                style={{
+                  backgroundColor: 'rgb(var(--color-primary))',
+                  boxShadow: '0 0 0 rgba(var(--color-primary), 0)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 10px 30px rgba(var(--color-primary), 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 0 rgba(var(--color-primary), 0)';
+                }}>
+                Join
+              </button>
+            </div>
           </div>
         </div>
       </footer>
