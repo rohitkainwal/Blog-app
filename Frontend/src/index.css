@@ -75,3 +75,16 @@
 .animate-fadeIn {
   animation: fadeIn 0.8s ease forwards;
 }
+
+
+[data-aos="blur-up"] {
+  filter: blur(12px);
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+[data-aos="blur-up"].aos-animate {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateY(0);
+}

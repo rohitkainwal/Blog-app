@@ -48,6 +48,14 @@ const AllPosts = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Get greeting based on time
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  };
+
   if (loading)
     return (
       <div className="h-screen flex items-center justify-center bg-white dark:bg-zinc-950">
@@ -62,25 +70,25 @@ const AllPosts = () => {
   const avatarInitial = user?.fullName?.charAt(0) || user?.username?.charAt(0) || "?";
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-zinc-50 via-white to-zinc-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 transition-colors duration-500">
-      {/* Ambient background effects */}
+    <div className="flex min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-500">
+      {/* Subtle ambient effects */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl opacity-20 dark:opacity-10 animate-pulse"
+        <div className="absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl opacity-10 dark:opacity-5 animate-pulse"
           style={{ backgroundColor: 'rgb(var(--color-primary))' }}></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl opacity-15 dark:opacity-10 animate-pulse"
+        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl opacity-10 dark:opacity-5 animate-pulse"
           style={{ backgroundColor: 'rgb(var(--color-primary))', animationDelay: '2s' }}></div>
       </div>
 
       {/* ================= SIDEBAR ================= */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border-r border-zinc-200/50 dark:border-zinc-800/50 transform transition-all duration-300 ${
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border-r border-zinc-100 dark:border-zinc-900 transform transition-all duration-300 ${
           isDrawerOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 shadow-2xl lg:shadow-none`}
       >
-        <div className="p-6 h-full flex flex-col">
+        <div className="p-8 h-full flex flex-col">
           {/* Logo */}
-          <div className="flex items-center justify-between mb-8">
-           <Link to="/">
+          <div className="flex items-center justify-between mb-12">
+            <Link to="/">
           <div className="flex items-center gap-3 group">
             <div className="relative w-11 h-11 rounded-full bg-gradient-to-br from-violet-500 via-indigo-500 to-cyan-500 p-[2px] group-hover:scale-110 transition-transform">
               <div
@@ -97,10 +105,10 @@ const AllPosts = () => {
           </div>
         </Link>
             <button
-              className="lg:hidden p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors text-zinc-600 dark:text-zinc-400"
+              className="lg:hidden p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-colors text-zinc-400"
               onClick={() => setIsDrawerOpen(false)}
             >
-              <FaTimes size={18} />
+              <FaTimes size={16} />
             </button>
           </div>
 
@@ -110,68 +118,63 @@ const AllPosts = () => {
               setActiveView("create");
               setIsDrawerOpen(false);
             }}
-            className="relative group mb-6 w-full px-5 py-3.5 rounded-2xl text-white font-bold shadow-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="relative group mb-8 w-full px-4 py-3 rounded-xl text-white font-medium text-sm shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"
             style={{ backgroundColor: 'rgb(var(--color-primary))' }}
           >
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300"
-              style={{ backgroundColor: 'rgb(var(--color-primary))' }}></div>
             <span className="relative flex items-center justify-center gap-2">
-              <FaPlus size={14} /> New Blog
+              <FaPlus size={12} /> New Blog
             </span>
           </button>
 
           {/* Navigation */}
-          <nav className="space-y-2 flex-1">
+          <nav className="space-y-1 flex-1">
             <button
               onClick={() => {
                 setActiveView("posts");
                 setIsDrawerOpen(false);
               }}
-              className={`group flex items-center gap-3 w-full px-5 py-3.5 rounded-xl font-semibold transition-all duration-200 ${
+              className={`group flex items-center gap-3 w-full px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 ${
                 activeView === "posts"
-                  ? "text-white shadow-md"
-                  : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  ? "text-white"
+                  : "text-zinc-500 dark:text-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-300"
               }`}
               style={activeView === "posts" ? { backgroundColor: 'rgb(var(--color-primary))' } : {}}
             >
-              <FaThLarge size={16} />
+              <FaThLarge size={14} />
               <span>All Blogs</span>
-              {activeView === "posts" && (
-                <div className="ml-auto w-2 h-2 rounded-full bg-white"></div>
-              )}
             </button>
 
-            <button className="group flex items-center gap-3 w-full px-5 py-3.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 font-semibold transition-all duration-200">
-              <FaFire size={16} />
+            <button className="group flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-zinc-500 dark:text-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-300 font-medium text-sm transition-all duration-200">
+              <FaFire size={14} />
               <span>Trending</span>
             </button>
 
-            <button className="group flex items-center gap-3 w-full px-5 py-3.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 font-semibold transition-all duration-200">
-              <FaBookmark size={16} />
+            <button className="group flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-zinc-500 dark:text-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-300 font-medium text-sm transition-all duration-200">
+              <FaBookmark size={14} />
               <span>Saved</span>
             </button>
 
-            <button className="group flex items-center gap-3 w-full px-5 py-3.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 font-semibold transition-all duration-200">
-              <FaPenNib size={16} />
+            <button className="group flex items-center gap-3 w-full px-4 py-2.5 rounded-lg text-zinc-500 dark:text-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-300 font-medium text-sm transition-all duration-200">
+              <FaPenNib size={14} />
               <span>My Drafts</span>
             </button>
           </nav>
 
           {/* Stats Card */}
-          <div className="mt-auto p-4 rounded-2xl bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-800 dark:to-zinc-900 border border-zinc-200 dark:border-zinc-700">
-            <p className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3">
+          <div className="mt-auto p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-900">
+            <p className="text-xs font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-600 mb-3">
               Your Stats
             </p>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">Total Blogs</span>
-                <span className="text-lg font-black" style={{ color: 'rgb(var(--color-primary))' }}>
+                <span className="text-sm text-zinc-500 dark:text-zinc-500 font-light">Total Blogs</span>
+                <span className="text-lg font-bold" style={{ color: 'rgb(var(--color-primary))' }}>
                   {posts?.length || 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">This Week</span>
-                <span className="text-lg font-black text-zinc-700 dark:text-zinc-300">3</span>
+                <span className="text-sm text-zinc-500 dark:text-zinc-500 font-light">This Week</span>
+                <span className="text-lg font-bold text-zinc-700 dark:text-zinc-400">3</span>
               </div>
             </div>
           </div>
@@ -181,53 +184,48 @@ const AllPosts = () => {
       {/* ================= MAIN ================= */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* -------- TOP BAR -------- */}
-        <header className="sticky top-0 z-40 h-20 px-6 flex items-center justify-between bg-white/70 dark:bg-zinc-900/70 backdrop-blur-2xl border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors duration-300">
+        <header className="sticky top-0 z-40 h-16 px-6 flex items-center justify-between bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-100 dark:border-zinc-900 transition-colors duration-300">
           {/* LEFT: Menu & Search */}
           <div className="flex items-center gap-4">
             <button
-              className="lg:hidden p-2.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-all text-zinc-600 dark:text-zinc-400 hover:scale-105"
+              className="lg:hidden p-2 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all text-zinc-400"
               onClick={() => setIsDrawerOpen(true)}
             >
-              <FaBars size={20} />
+              <FaBars size={18} />
             </button>
 
             <div className="relative hidden md:flex items-center group">
               <FaSearch 
-                className="absolute left-4 text-zinc-400 transition-colors z-10"
-                size={16}
-                style={{ 
-                  color: 'rgba(var(--color-primary), 0.5)'
-                }}
+                className="absolute left-3.5 text-zinc-400 transition-colors z-10"
+                size={14}
               />
               <input
                 placeholder="Search blogs..."
-                className="pl-11 pr-4 py-3 w-80 rounded-2xl bg-zinc-100/80 dark:bg-zinc-800/80 dark:text-white outline-none border-2 border-transparent focus:border-opacity-100 transition-all duration-300 font-medium text-sm placeholder:text-zinc-400"
+                className="pl-10 pr-4 py-2 w-72 rounded-lg bg-zinc-50 dark:bg-zinc-900 dark:text-white outline-none border border-transparent focus:border-opacity-100 transition-all duration-300 font-light text-sm placeholder:text-zinc-400"
                 style={{
                   borderColor: 'transparent',
                 }}
                 onFocus={(e) => {
                   e.currentTarget.style.borderColor = 'rgb(var(--color-primary))';
-                  e.currentTarget.style.backgroundColor = 'rgba(var(--color-primary), 0.05)';
                 }}
                 onBlur={(e) => {
                   e.currentTarget.style.borderColor = 'transparent';
-                  e.currentTarget.style.backgroundColor = '';
                 }}
               />
             </div>
           </div>
 
           {/* RIGHT: Tools & User */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {/* Color Picker */}
             <div className="relative">
               <button
                 onClick={() => setIsPickerOpen(!isPickerOpen)}
-                className="p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 hover:scale-105"
+                className="p-2 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all duration-200"
                 style={{ color: 'rgb(var(--color-primary))' }}
                 title="Change Theme Color"
               >
-                <MdOutlineColorLens size={22} />
+                <MdOutlineColorLens size={18} />
               </button>
 
               {isPickerOpen && (
@@ -240,20 +238,20 @@ const AllPosts = () => {
             {/* Theme Toggle */}
             <button
               onClick={() => setIsDark(!isDark)}
-              className="relative w-16 h-8 flex items-center rounded-full p-1 transition-all duration-300 shadow-inner hover:scale-105"
+              className="relative w-14 h-7 flex items-center rounded-full p-1 transition-all duration-300 border border-zinc-200 dark:border-zinc-800"
               style={{
-                backgroundColor: isDark ? 'rgba(var(--color-primary), 0.2)' : 'rgb(250, 204, 21)',
+                backgroundColor: isDark ? 'rgba(var(--color-primary), 0.1)' : 'rgb(254, 243, 199)',
               }}
             >
               <div
-                className={`absolute w-6 h-6 rounded-full flex items-center justify-center text-white transition-all duration-300 shadow-lg ${
-                  isDark ? "translate-x-8" : "translate-x-0"
+                className={`absolute w-5 h-5 rounded-full flex items-center justify-center text-white transition-all duration-300 shadow-sm ${
+                  isDark ? "translate-x-7" : "translate-x-0"
                 }`}
                 style={{
                   backgroundColor: isDark ? 'rgb(var(--color-primary))' : 'rgb(234, 179, 8)',
                 }}
               >
-                {isDark ? <FaMoon size={12} /> : <FaSun size={12} />}
+                {isDark ? <FaMoon size={10} /> : <FaSun size={10} />}
               </div>
             </button>
 
@@ -261,29 +259,26 @@ const AllPosts = () => {
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="w-11 h-11 rounded-full text-white font-bold uppercase transition-all shadow-md hover:shadow-xl flex items-center justify-center border-2 border-white dark:border-zinc-700 hover:scale-110 duration-300"
+                className="w-9 h-9 rounded-full text-white font-medium uppercase transition-all shadow-sm hover:shadow-md flex items-center justify-center border border-white/20 dark:border-zinc-800 hover:scale-105 duration-300 text-sm"
                 style={{ backgroundColor: 'rgb(var(--color-primary))' }}
               >
                 {avatarInitial}
               </button>
 
               {isUserMenuOpen && (
-                <div className="absolute right-0 mt-4 w-72 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-900 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                   {/* User Info */}
-                  <div className="px-5 py-4 border-b border-zinc-100 dark:border-zinc-800"
-                    style={{
-                      background: `linear-gradient(135deg, rgba(var(--color-primary), 0.1), transparent)`,
-                    }}>
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-12 h-12 rounded-full text-white font-bold flex items-center justify-center text-lg shadow-md"
+                  <div className="px-4 py-4 border-b border-zinc-100 dark:border-zinc-900">
+                    <div className="flex items-center gap-3 mb-1">
+                      <div className="w-10 h-10 rounded-full text-white font-medium flex items-center justify-center text-sm shadow-sm"
                         style={{ backgroundColor: 'rgb(var(--color-primary))' }}>
                         {avatarInitial}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-sm dark:text-white truncate">
+                        <p className="font-medium text-sm dark:text-white truncate">
                           {user?.username}
                         </p>
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
+                        <p className="text-xs text-zinc-500 dark:text-zinc-500 truncate font-light">
                           {user?.email}
                         </p>
                       </div>
@@ -292,21 +287,21 @@ const AllPosts = () => {
 
                   {/* Menu Items */}
                   <div className="p-2">
-                    <button className="flex items-center gap-3 w-full px-4 py-3 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-all duration-200">
-                      <FaUserEdit className="text-zinc-400" size={16} /> 
-                      <span className="font-medium">Edit Profile</span>
+                    <button className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all duration-200 font-light">
+                      <FaUserEdit className="text-zinc-400" size={14} /> 
+                      <span>Edit Profile</span>
                     </button>
-                    <button className="flex items-center gap-3 w-full px-4 py-3 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-all duration-200">
-                      <FaLock className="text-zinc-400" size={16} /> 
-                      <span className="font-medium">Security</span>
+                    <button className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all duration-200 font-light">
+                      <FaLock className="text-zinc-400" size={14} /> 
+                      <span>Security</span>
                     </button>
                   </div>
 
                   {/* Logout */}
-                  <div className="p-2 border-t border-zinc-100 dark:border-zinc-800">
+                  <div className="p-2 border-t border-zinc-100 dark:border-zinc-900">
                     <Link to="/" onClick={logout}>
-                      <button className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all duration-200 font-medium">
-                        <FaSignOutAlt size={16} /> Sign Out
+                      <button className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 font-light">
+                        <FaSignOutAlt size={14} /> Sign Out
                       </button>
                     </Link>
                   </div>
@@ -317,18 +312,28 @@ const AllPosts = () => {
         </header>
 
         {/* -------- CONTENT -------- */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-10">
+        <main className="flex-1 overflow-y-auto p-8 lg:p-12">
           {activeView === "create" && <CreatePost />}
 
           {activeView === "posts" &&
             (posts?.length ? (
               <div>
-                {/* Page Header */}
-                <div className="mb-8">
-                  <h2 className="text-3xl font-black text-zinc-900 dark:text-white mb-2">
-                    All Blogs
+                {/* Welcome Message */}
+                <div className="mb-12">
+                  <h2 className="text-2xl font-light text-zinc-900 dark:text-white mb-1">
+                    {getGreeting()}, {user?.username || 'Ajay'} 👋
                   </h2>
-                  <p className="text-zinc-600 dark:text-zinc-400">
+                  <p className="text-zinc-500 dark:text-zinc-500 font-light">
+                    Ready to write something today?
+                  </p>
+                </div>
+
+                {/* Section Header */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-medium text-zinc-900 dark:text-white mb-1">
+                    All Blogs
+                  </h3>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-500 font-light">
                     {posts.length} {posts.length === 1 ? 'blog' : 'blogs'} published
                   </p>
                 </div>
@@ -341,18 +346,18 @@ const AllPosts = () => {
             ) : (
               <div className="flex items-center justify-center min-h-[60vh]">
                 <div className="text-center max-w-md">
-                  <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center">
-                    <FaPenNib size={32} className="text-zinc-400" />
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center">
+                    <FaPenNib size={24} className="text-zinc-300 dark:text-zinc-700" />
                   </div>
-                  <h2 className="text-2xl font-black text-zinc-900 dark:text-white mb-3">
+                  <h2 className="text-xl font-medium text-zinc-900 dark:text-white mb-2">
                     No blogs yet
                   </h2>
-                  <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+                  <p className="text-zinc-500 dark:text-zinc-500 mb-8 font-light">
                     Start your writing journey by creating your first blog post
                   </p>
                   <button
                     onClick={() => setActiveView("create")}
-                    className="px-8 py-4 rounded-2xl text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                    className="px-6 py-3 rounded-lg text-white font-medium text-sm shadow-sm hover:shadow-md transition-all duration-300"
                     style={{ backgroundColor: 'rgb(var(--color-primary))' }}
                   >
                     Write First Blog

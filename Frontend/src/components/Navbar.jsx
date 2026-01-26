@@ -55,40 +55,39 @@ const Navbar = () => {
           <div className="relative">
               <button
                 onClick={() => setIsPickerOpen(!isPickerOpen)}
-                className="p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 hover:scale-105"
+                className="p-2 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all duration-200"
                 style={{ color: 'rgb(var(--color-primary))' }}
                 title="Change Theme Color"
               >
-                <MdOutlineColorLens size={22} />
+                <MdOutlineColorLens size={18} />
               </button>
 
               {isPickerOpen && (
-                <div className="absolute left-15 top-0 mt-0 z-50">
+                <div className="absolute right-0 mt-3 z-50">
                   <ThemeColorPicker close={() => setIsPickerOpen(false)} />
                 </div>
               )}
             </div>
 
-          {/* 🌗 Theme Toggle Switch */}
-          {/* Theme Toggle */}
-                     <button
-                       onClick={() => setIsDark(!isDark)}
-                       className="relative w-16 h-8 flex items-center rounded-full p-1 transition-all duration-300 shadow-inner hover:scale-105"
-                       style={{
-                         backgroundColor: isDark ? 'rgba(var(--color-primary), 0.2)' : 'rgb(250, 204, 21)',
-                       }}
-                     >
-                       <div
-                         className={`absolute w-6 h-6 rounded-full flex items-center justify-center text-white transition-all duration-300 shadow-lg ${
-                           isDark ? "translate-x-8" : "translate-x-0"
-                         }`}
-                         style={{
-                           backgroundColor: isDark ? 'rgb(var(--color-primary))' : 'rgb(234, 179, 8)',
-                         }}
-                       >
-                         {isDark ? <FaMoon size={12} /> : <FaSun size={12} />}
-                       </div>
-                     </button>
+            {/* Theme Toggle */}
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className="relative w-14 h-7 flex items-center rounded-full p-1 transition-all duration-300 border border-zinc-200 dark:border-zinc-800"
+              style={{
+                backgroundColor: isDark ? 'rgba(var(--color-primary), 0.1)' : 'rgb(254, 243, 199)',
+              }}
+            >
+              <div
+                className={`absolute w-5 h-5 rounded-full flex items-center justify-center text-white transition-all duration-300 shadow-sm ${
+                  isDark ? "translate-x-7" : "translate-x-0"
+                }`}
+                style={{
+                  backgroundColor: isDark ? 'rgb(var(--color-primary))' : 'rgb(234, 179, 8)',
+                }}
+              >
+                {isDark ? <FaMoon size={10} /> : <FaSun size={10} />}
+              </div>
+            </button>
         </div>
       </div>
     </header>

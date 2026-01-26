@@ -27,7 +27,7 @@ const HomePage = () => {
       
       <BackgroundBlob/>
       <Navbar />
-
+     
       {/* --- HERO SECTION --- */}
       <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-40 px-6 overflow-hidden">
         {/* Grid pattern overlay */}
@@ -35,6 +35,9 @@ const HomePage = () => {
         
         <div className="relative max-w-5xl mx-auto text-center">
           {/* Tagline with gradient border */}
+
+           <div data-aos="blur-up" data-aos-delay="300">
+
           <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full backdrop-blur-sm border text-xs font-semibold tracking-wider uppercase mb-12 group transition-all duration-300 shadow-sm dark:shadow-none hover:shadow-md hover:scale-105"
             style={{
               backgroundColor: 'rgba(var(--color-primary), 0.1)',
@@ -46,11 +49,16 @@ const HomePage = () => {
             <FaArrowRight size={10} className="group-hover:translate-x-1 transition-transform duration-300" style={{ color: 'rgb(var(--color-primary))' }} />
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
+          </div>
+            
+          <h1 className="text-5xl md:text-8xl font-medium tracking-tighter mb-8 leading-[0.9]">
+             <div data-aos="blur-up" data-aos-delay="300">
             <span className="text-gray-900 dark:text-white">
               Space for your
             </span>
+           
             <br />
+           
             <span className="relative inline-block mt-4">
               <span className="italic font-light" style={{ color: 'rgb(var(--color-primary))' }}>
                 mind to breathe
@@ -61,12 +69,15 @@ const HomePage = () => {
                 }}></div>
             </span>
             <span className="text-gray-900 dark:text-white">.</span>
+            </div>
           </h1>
 
+<div data-aos="blur-up" data-aos-delay="300">
           <p className="text-lg md:text-xl text-gray-600 dark:text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
             A minimalist sanctuary for your daily thoughts and deep dives. Capture
             what matters, leave the noise behind.
           </p>
+          </div>
 
           <Link to={destination}>
             <button className="group relative inline-flex items-center gap-3 px-10 py-4 text-base font-semibold text-white rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
@@ -80,12 +91,53 @@ const HomePage = () => {
               onMouseLeave={(e) => {
                 e.currentTarget.style.boxShadow = '0 0 40px rgba(var(--color-primary), 0)';
               }}>
-              <span className="relative">Start Writing</span>
+              <span className="relative">Get Started</span>
               <FaArrowRight size={14} className="relative group-hover:translate-x-1 transition-transform" />
             </button>
           </Link>
         </div>
       </section>
+
+
+     
+
+
+
+
+
+<div className="flex justify-center my-20">
+  {/* Light mode wrapper */}
+  <div className="relative w-[900px] max-w-full rounded-2xl border-8 border-white shadow-2xl dark:hidden">
+    <img
+      src="/Frame1.png"
+      alt="Frame Light"
+      className="w-full h-auto rounded-xl"
+      data-aos="flip-down"
+      data-aos-offset="200"
+      data-aos-delay="100"
+      data-aos-duration="800"
+      data-aos-easing="ease-in-out"
+       onLoad={() => AOS.refresh()} // refresh AOS after image loads
+    />
+  </div>
+
+  {/* Dark mode wrapper */}
+  <div className="relative w-[900px] max-w-full rounded-2xl border-8 border-gray-800 shadow-2xl hidden dark:block">
+    <img
+      src="/Frame2.png"
+      alt="Frame Dark"
+      className="w-full h-auto rounded-xl"
+      data-aos="flip-down"
+      data-aos-offset="200"
+      data-aos-delay="100"
+      data-aos-duration="800"
+      data-aos-easing="ease-in-out"
+       onLoad={() => AOS.refresh()} // refresh AOS after image loads
+    />
+  </div>
+</div>
+
+
 
       {/* --- ABOUT SECTION --- */}
       <section className="max-w-4xl mx-auto px-6 py-20">
@@ -111,8 +163,8 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* --- CONTENT SECTION --- */}
-      <main className="max-w-6xl mx-auto px-6 py-20">
+
+      {/* <main className="max-w-6xl mx-auto px-6 py-20">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
           <div>
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">
@@ -137,7 +189,7 @@ const HomePage = () => {
           <PostCard />
         </div>
 
-        {/* Callout */}
+       
         <div className="relative mt-32 p-12 md:p-20 rounded-3xl overflow-hidden group"
           style={{
             borderWidth: '1px',
@@ -171,7 +223,7 @@ const HomePage = () => {
             </Link>
           </div>
         </div>
-      </main>
+      </main> */}
 
       {/* --- FOOTER --- */}
       <footer className="px-6 py-24 border-t border-gray-200 dark:border-white/10">
