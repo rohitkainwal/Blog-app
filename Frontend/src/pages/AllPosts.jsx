@@ -2,6 +2,8 @@ import React, { useContext, useState, useRef, useEffect } from "react";
 import { PostContext } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
 import { MdOutlineColorLens } from "react-icons/md";
+import EditProfileModel from "../components/EditProfileModel";
+import EditPasswordModel from "../components/EditPasswordModel";
 import {
   FaBars,
   FaTimes,
@@ -30,6 +32,8 @@ const AllPosts = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [activeView, setActiveView] = useState("posts");
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+ const [showEditModel, setShowEditModel] = useState(false);
+  const [showPasswordModel, setShowPasswordModel] = useState(false);
 
   const userMenuRef = useRef(null);
 
@@ -287,11 +291,14 @@ const AllPosts = () => {
 
                   {/* Menu Items */}
                   <div className="p-2">
-                    <button className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all duration-200 font-light">
+                    
+                    <button  onClick={() => setShowEditModel(true)} className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all duration-200 font-light">
                       <FaUserEdit className="text-zinc-400" size={14} /> 
+                      
                       <span>Edit Profile</span>
                     </button>
-                    <button className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all duration-200 font-light">
+                    
+                    <button  onClick={() => setShowPasswordModel(true)} className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all duration-200 font-light">
                       <FaLock className="text-zinc-400" size={14} /> 
                       <span>Security</span>
                     </button>
@@ -367,6 +374,14 @@ const AllPosts = () => {
             ))}
         </main>
       </div>
+       {/* Modals */}
+      {showEditModel && (
+        <EditProfileModel onClose={() => setShowEditModel(false)} />
+      )}
+      {showPasswordModel && (
+        <EditPasswordModel onClose={() => setShowPasswordModel(false)} />
+      )}
+
     </div>
   );
 };
