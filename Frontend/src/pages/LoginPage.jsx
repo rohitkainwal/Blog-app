@@ -125,7 +125,7 @@ const LoginPage = () => {
                         PASSWORD
                       </label>
                       <Link 
-                        to="/forgot" 
+                        to="/forgot-password" 
                         className="text-xs font-bold hover:underline transition-all"
                         style={{ color: 'rgb(var(--color-primary))' }}
                       >

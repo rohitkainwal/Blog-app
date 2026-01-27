@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext , useState} from "react";
 import { RouterProvider } from "react-router-dom";
 import { myRoute } from "./routes/Routing";
 import { Toaster } from "react-hot-toast";
@@ -11,6 +11,27 @@ import "aos/dist/aos.css";
 
 const App = () => {
   const { loading } = useContext(AuthContext);
+
+``
+  
+const [theme, setTheme] = useState("light");
+
+useEffect(() => {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    setTheme(savedTheme);
+  }
+}, []);
+
+
+useEffect(() => {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+}, [theme]);
+
 
    useEffect(() => {
     AOS.init({
